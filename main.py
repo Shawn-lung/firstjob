@@ -1,7 +1,9 @@
 import twstock
 import pandas as pd 
 import time
-wait = int(input('time'))*60
+import basic
+twstock.__update_codes()
+wait = int(input('time'))
 stocklist = []
 realtime_dict = {}
 info_dict = {}
@@ -18,9 +20,11 @@ while True:
         realtime = all.get('realtime')
         info_dict[i] = info
         realtime_dict[i] = realtime
-
+        close = basic.Basic.close(i)
+    
     print(pd.DataFrame(realtime_dict))
     print(pd.DataFrame(info_dict))
+    print(close)
     try:
         time.sleep(wait)
     except KeyboardInterrupt:
