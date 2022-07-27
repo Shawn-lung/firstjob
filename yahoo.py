@@ -16,12 +16,12 @@ while True:
     df.head()
 
     df['dt'] = pandas.to_datetime(df['timestamp'] + 3600 * 8, unit = 's')
-    print(df)
     
     #plt.plot(df['dt'], close_list)
     #plt.show()
     previous_close = jd[0]['chart']['meta']['previousClose']
     open = jd[0]['chart']['indicators']['quote'][0]['open'][1]
+    close_list[0] = open
     limit_up_price = jd[0]['chart']['meta']["limitUpPrice"]
     limit_down_price = jd[0]['chart']['meta']["limitDownPrice"]
     close = jd[0]['chart']['indicators']['quote'][0]['close'][-1]
@@ -29,5 +29,7 @@ while True:
     percentage = updown/previous_close * 100  
     close_list_without_none = [x for x in close_list if x != None]
     amplitude = max(close_list_without_none) - min(close_list_without_none)
-    print(amplitude)
+    
+    df2 = pandas.DataFrame({'time' : df['dt'], 'price' : close_list })
+    print(df2)
     time.sleep(minutes)
