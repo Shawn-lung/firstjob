@@ -1,3 +1,3 @@
 from lib import Get_info
-
-print(Get_info.request_url(['2330','2451']))
+gi = Get_info(['2330','2451'])
+print(gi.request_url())

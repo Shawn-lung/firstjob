@@ -1,19 +1,23 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QFont
 
-def window():
-   app = QApplication(sys.argv)
-   widget = QWidget()
 
-   textLabel = QLabel(widget)
-   textLabel.setText("Hello World!")
-   textLabel.move(110,85)
+class MyWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.set_initUI()
 
-   widget.setGeometry(50,50,320,200)
-   widget.setWindowTitle("PyQt6 Example")
-   widget.show()
-   sys.exit(app.exec())
+    def set_initUI(self):
+        self.setGeometry(50,50,320,200)
+        self.setWindowTitle("PyQt6 Example")
+        self.mylabel = QLabel('hello world', self)
+        self.mylabel.move(40, 50)
+        self.mylabel.setFont(QFont('Arial', 18))
+
 
 if __name__ == '__main__':
-   window()
+    app = QApplication(sys.argv)
+    widget = MyWidget()
+    widget.show()
+    sys.exit(app.exec())
