@@ -13,7 +13,6 @@ while True:
     timestamp = jd[0]['chart']['timestamp']
     df = pandas.DataFrame({'timestamp': timestamp, 'close':close_list})
 
-    df.head()
 
     df['dt'] = pandas.to_datetime(df['timestamp'] + 3600 * 8, unit = 's')
     
@@ -32,4 +31,7 @@ while True:
     
     df2 = pandas.DataFrame({'time' : df['dt'], 'price' : close_list })
     print(df2)
-    time.sleep(minutes)
+    try :
+        time.sleep(minutes)
+    except KeyboardInterrupt:
+        break
