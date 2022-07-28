@@ -1,3 +1,5 @@
-from lib import Get_info
-gi = Get_info(['2330','2451'])
-print(gi.request_url())
+import numpy as np
+import pandas as pd
+import talib
+all_ta_label = talib.get_functions()
+print(all_ta_label)

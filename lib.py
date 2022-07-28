@@ -1,6 +1,10 @@
 import requests
 import pandas
-
+import twstock
+import yfinance as yf
+import numpy as np
+import pandas as pd
+from talib import abstract,get_functions
 class Get_info(): 
     def __init__(self, stock_list):
         self.jd_dict = {}
@@ -8,6 +12,7 @@ class Get_info():
         self.time_list = []
         self.df = {}
         self.bn = {}
+        self.symbol_list = []
     def request_url(self):
 
         for stock in self.stock_list:
@@ -23,6 +28,7 @@ class Get_info():
             #print(df[stock]['timestamp'])
             #df[stock]['dt'] = pandas.to_datetime(df[stock]['timestamp'] + 3600 * 8, unit = 's')
             
+            self.symbol_list.append(self.jd_dict[stock][0]['chart']['meta']['symbol'])
             previous_close = self.jd_dict[stock][0]['chart']['meta']['previousClose']
             open = self.jd_dict[stock][0]['chart']['indicators']['quote'][0]['open'][1]
             self.close_list[0] = open
@@ -38,4 +44,38 @@ class Get_info():
             self.df[stock] = (pandas.DataFrame({'time' : time_list, 'price' : self.close_list }))  
         print(self.bn)
         print(self.df)
+        print(self.symbol_list)
+        return self.symbol_list
+        
+def get_history_data(stock_list):
+        data = {}
+        for stock in stock_list:
+            stock_str = str(stock)
+            stock_str = stock_str.replace("'",'')
+            data[stock] = yf.Ticker(stock_str).history(period = 'max')
+            data[stock] = data[stock]
+        print(data)
+        return data
+""" def get_adx(data,stock_list):
+    adx = {}
+    for stock in stock_list:        
+        adx[stock] = talib.ADX(data[stock].High,data[stock].Low,data[stock].Close, timeperiod = 14)
+        print(adx[stock])
+    return(adx)
+def get_rsi(data,stock_list):
+    rsi = {}
+    for stock in stock_list:        
+        rsi[stock] = talib.RSI(data[stock].Close, timeperiod = 14)
+        print(rsi[stock]) """
+def ta_list(data,stock_list):
+    ta_list = get_functions()
+    for stock in stock_list:
+        for x in ta_list:
+            #abstract.x(data[stock])
+            output = eval(f'abstract.{x}({data[stock]})')
+            print(output)
+      
+        
+
+
             
