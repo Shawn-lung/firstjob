@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QWidget
 from UI import Ui_Form
 import pyqtgraph as pg
 import requests
-
+import pandas
 class Controller(QWidget):
     def __init__(self):
         super().__init__()
@@ -18,11 +18,22 @@ class Controller(QWidget):
         print("btn clicked")
         stock_code = self.ui.lineEdit.text()
         requestData = requests.get(f"https://tw.stock.yahoo.com/_td-stock/api/resource/FinanceChartService.ApacLibraCharts;symbols=%5B%22{stock_code}.TW%22%5D;type=tick?bkt=%5B%22tw-qsp-exp-no2-1%22%2C%22test-es-module-production%22%2C%22test-portfolio-stream%22%5D&device=desktop&ecma=modern&feature=ecmaModern%2CshowPortfolioStream&intl=tw&lang=zh-Hant-TW&partner=none&prid=2h3pnulg7tklc&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.902&returnMeta=true")
-        close_lst = [x for x in requestData.json()['data'][0]['chart']['indicators']['quote'][0]['close'] if x != None]
+        symbol_lst = requestData.json()['data'][0]['symbol']
         timestamp_lst = [(x - 1658883600) / 60 for x in requestData.json()['data'][0]['chart']['timestamp']]
+        close_lst = []
+        for i in range(len(timestamp_lst)):
+            if requestData.json()['data'][0]['chart']['indicators']['quote'][0]['close'][i] == None:
+                timestamp_lst[i] = None
+            else:
+                close_lst.append(requestData.json()['data'][0]['chart']['indicators']['quote'][0]['close'][i])
+        timestamp_lst = [pandas.to_datetime(x+3600*8, unit = 's') for x in timestamp_lst if x != None]
         plotItem = pg.PlotItem()
         self.ui.graphicsView.getPlotItem().removeItem(plotItem)
-        self.ui.graphicsView.addItem(plotItem.plot(x=range(len(close_lst)), y=close_lst, pen = 'r'))
+        axis = timestamp_lst
+        dateAxisItem = pg.DateAxisItem(orientation='bottom')
+        plotItem = plotItem.plot( y =close_lst, pen = 'r')
+        self.ui.graphicsView.setAxisItems({'bottom':dateAxisItem})
+        self.ui.graphicsView.addItem(plotItem)
         self.labelUpdate(requestData)
 
     def labelUpdate(self, requestData):
