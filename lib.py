@@ -42,20 +42,24 @@ class Get_info():
             self.bn[stock] = {'前日收盤價': previous_close, '開盤價': open, '漲停價' : limit_up_price, '跌停價' : limit_down_price, '當下股價' : close, '漲跌幅' :updown, '漲跌比率' : percentage, '振幅' : amplitude}
         
             self.df[stock] = (pandas.DataFrame({'time' : time_list, 'price' : self.close_list }))  
-        print(self.bn)
-        print(self.df)
-        print(self.symbol_list)
         return self.symbol_list
         
-def get_history_data(stock_list):
+def get_history_data(stock_list,periods):
+        olddata = {}
         data = {}
+        
         for stock in stock_list:
             stock_str = str(stock)
             stock_str = stock_str.replace("'",'')
-            data[stock] = yf.Ticker(stock_str).history(period = 'max')
-            data[stock] = data[stock]
+            data[stock] = yf.Ticker(stock_str).history(period = '1d',interval = '1m')
+            data[stock]['open'] = data[stock].pop('Open')
+            data[stock]['high'] = data[stock].pop('High')
+            data[stock]['low'] = data[stock].pop('Low')
+            data[stock]['close'] = data[stock].pop('Close')
+            data[stock]['volume'] = data[stock].pop('Volume')
         print(data)
         return data
+
 """ def get_adx(data,stock_list):
     adx = {}
     for stock in stock_list:        
@@ -67,15 +71,16 @@ def get_rsi(data,stock_list):
     for stock in stock_list:        
         rsi[stock] = talib.RSI(data[stock].Close, timeperiod = 14)
         print(rsi[stock]) """
-def ta_list(data,stock_list):
+def ta_list(data,stock_list,periods):
     ta_list = get_functions()
-    for stock in stock_list:
-        for x in ta_list:
+    for x in ta_list:
+        if x != 'MAVP' :
             #abstract.x(data[stock])
-            output = eval(f'abstract.{x}({data[stock]})')
-            print(output)
-      
-        
+            try:
+                output = eval(f"abstract.{x}(data['2330.TW'])")
+                """ print(x,output) """
+            except:
+                print(x)
 
 
             
