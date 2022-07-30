@@ -1,10 +1,7 @@
 import requests
 import pandas
-import twstock
 import yfinance as yf
-import numpy as np
-import pandas as pd
-#from talib import abstract,get_functions
+from talib import abstract,get_functions
 class Get_info(): 
     def __init__(self, stock_list):
         self.jd_dict = {}

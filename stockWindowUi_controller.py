@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QTimer
 from stockWindowUi import Ui_Form
 from CrawlerClass import Crawler

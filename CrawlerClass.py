@@ -1,9 +1,6 @@
-from typing import List
 import requests
-import pandas
 import yfinance as yf
-import pandas as pd
-from talib import abstract, get_functions
+from talib import get_functions
 
 
 class Crawler():
@@ -29,6 +26,7 @@ class Crawler():
         self.stock_data['updown'] = self.stock_data['close'][-1] - self.stock_data['previous_close']
         self.stock_data['percentage'] = self.stock_data['updown'] / self.stock_data['previous_close'] * 100
         self.stock_data['amplitude'] = sorted(self.stock_data['close'])[-1] - sorted(self.stock_data['close'])[0]
+    
     def ta_list(data, stock_list, periods):
         ta_list = get_functions()
         for x in ta_list:

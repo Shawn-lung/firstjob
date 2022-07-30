@@ -1,4 +1,3 @@
-from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtWidgets import QWidget
 from MainUi import Ui_Form
 from stockWindowUi_controller import stockWindowUiController
@@ -20,7 +19,6 @@ class MainUiController(QWidget):
     def showStockWindow(self, stock_code):
         self.openedLst.append(QWidget())
         self.stockWindowUi = stockWindowUiController(self.openedLst[-1], stock_code)
-        #self.stockWindowUi.ui.setupUi()
         self.openedLst[-1].show()
 
 
