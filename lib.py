@@ -13,8 +13,8 @@ class Get_info():
         self.df = {}
         self.bn = {}
         self.symbol_list = []
-    def request_url(self):
 
+    def request_url(self):
         for stock in self.stock_list:
             time_list = []
             res = requests.get("https://tw.stock.yahoo.com/_td-stock/api/resource/FinanceChartService.ApacLibraCharts;symbols=%5B%22"+stock+".TW%22%5D;type=tick?bkt=%5B%22tw-qsp-exp-no2-1%22%2C%22test-es-module-production%22%2C%22test-portfolio-stream%22%5D&device=desktop&ecma=modern&feature=ecmaModern%2CshowPortfolioStream&intl=tw&lang=zh-Hant-TW&partner=none&prid=2h3pnulg7tklc&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.902&returnMeta=true")
@@ -109,6 +109,7 @@ def deal_pom(close,plus,minus):
             if inminus(i,plus,minus,close) not in inflection_lst:
                 inflection_lst.append(inminus(i,plus,minus,close))
     print(inflection_lst)
+    
 def inplus(i,plus,minus,close):
     if i not in minus and i <= len(close):
         return(inplus(i+1,plus,minus,close))

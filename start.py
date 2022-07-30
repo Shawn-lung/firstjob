@@ -1,8 +1,9 @@
 from PyQt6.QtWidgets import QApplication
-from Controller import Controller
+from MainUi_controller import MainUiController
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    window = Controller()
-    window.show()
+    app.processEvents()
+    mainWindow = MainUiController()
+    mainWindow.show()
     sys.exit(app.exec())
