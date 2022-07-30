@@ -4,7 +4,7 @@ import twstock
 import yfinance as yf
 import numpy as np
 import pandas as pd
-from talib import abstract,get_functions
+#from talib import abstract,get_functions
 class Get_info(): 
     def __init__(self, stock_list):
         self.jd_dict = {}
@@ -57,7 +57,6 @@ def get_history_data(stock_list,periods):
             data[stock]['low'] = data[stock].pop('Low')
             data[stock]['close'] = data[stock].pop('Close')
             data[stock]['volume'] = data[stock].pop('Volume')
-        print(data)
         return data
 
 """ def get_adx(data,stock_list):
@@ -71,16 +70,53 @@ def get_rsi(data,stock_list):
     for stock in stock_list:        
         rsi[stock] = talib.RSI(data[stock].Close, timeperiod = 14)
         print(rsi[stock]) """
-def ta_list(data,stock_list,periods):
+def ta_list(data,stock_list):
     ta_list = get_functions()
     for x in ta_list:
         if x != 'MAVP' :
             #abstract.x(data[stock])
             try:
                 output = eval(f"abstract.{x}(data['2330.TW'])")
-                """ print(x,output) """
             except:
-                print(x)
+                print(x) 
 
+def inflection_point(data, stock_list):
+    for stock in stock_list:
+        close = data[stock]['close']
+        plus_or_minus(close , stock)
 
-            
+def plus_or_minus(close, stock):
+    plus = []
+    minus = []
+    for i in range(len(close)-1):
+        if close[i+1] > close[i]:
+            plus.append(i+1)
+        elif close[i+1] < close[i]:
+            minus.append(i+1)    
+        else:
+            pass
+    print('plus' , plus)
+    print('minus', minus)
+    deal_pom(close,plus,minus)
+
+def deal_pom(close,plus,minus):
+    inflection_lst = []
+    for i in range(len(close)):
+        if i in plus:
+            if inplus(i,plus,minus,close) not in inflection_lst:
+                inflection_lst.append(inplus(i,plus,minus,close))
+        if i in minus:
+            if inminus(i,plus,minus,close) not in inflection_lst:
+                inflection_lst.append(inminus(i,plus,minus,close))
+    print(inflection_lst)
+def inplus(i,plus,minus,close):
+    if i not in minus and i <= len(close):
+        return(inplus(i+1,plus,minus,close))
+    else:
+        return(i-1)
+
+def inminus(i,plus,minus,close):
+    if i not in plus:
+        return(inminus(i+1,plus,minus,close))
+    else:
+        return(i-1)
