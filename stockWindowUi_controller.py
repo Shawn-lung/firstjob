@@ -31,7 +31,8 @@ class stockWindowUiController(QWidget):
         
 
         plotItem = pg.PlotItem(title=crawler.stock_symbol)
-        plotItem.plot(y=crawler.stock_data['close'], pen='r')
+        plotItem.plot(y=crawler.stock_data['close'], pen='green')
+        plotItem.plot(y=crawler.ta_list_MA(), pen='r')
         plotItem.plot(x=crawler.plus_or_minus('x'), y=crawler.plus_or_minus('y'), symbol='star')
 
         self.ui.graphicsView.setCentralItem(plotItem)

@@ -1,6 +1,6 @@
 import requests
 import yfinance as yf
-from talib import get_functions
+from talib import get_functions ,abstract, MA
 
 
 class Crawler():
@@ -9,6 +9,7 @@ class Crawler():
         self.stock_code = stock_code
         self.get_history_data(stock_code)
 
+        
     def get_history_data(self, stock):
         res = requests.get("https://tw.stock.yahoo.com/_td-stock/api/resource/FinanceChartService.ApacLibraCharts;symbols=%5B%22"+stock+".TW%22%5D;type=tick?bkt=%5B%22tw-qsp-exp-no2-1%22%2C%22test-es-module-production%22%2C%22test-portfolio-stream%22%5D&device=desktop&ecma=modern&feature=ecmaModern%2CshowPortfolioStream&intl=tw&lang=zh-Hant-TW&partner=none&prid=2h3pnulg7tklc&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.902&returnMeta=true")
         self.stock_symbol = res.json()['data'][0]['chart']['meta']['symbol']
@@ -26,16 +27,12 @@ class Crawler():
         self.stock_data['updown'] = self.stock_data['close'][-1] - self.stock_data['previous_close']
         self.stock_data['percentage'] = self.stock_data['updown'] / self.stock_data['previous_close'] * 100
         self.stock_data['amplitude'] = sorted(self.stock_data['close'])[-1] - sorted(self.stock_data['close'])[0]
+        
+
     
-    def ta_list(data, stock_list, periods):
-        ta_list = get_functions()
-        for x in ta_list:
-            if x != 'MAVP':
-                # abstract.x(data[stock])
-                try:
-                    output = eval(f"abstract.{x}(data['2330.TW'])")
-                except:
-                    pass
+    def ta_list_MA(self):
+        return MA(self.stock_data['close'])
+
 
     def plus_or_minus(self, x):
         self.plus = []

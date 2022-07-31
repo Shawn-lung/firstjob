@@ -41,10 +41,9 @@ class Get_info():
             self.df[stock] = (pandas.DataFrame({'time' : time_list, 'price' : self.close_list }))  
         return self.symbol_list
         
-def get_history_data(stock_list,periods):
+def get_history_data(stock_list):
         olddata = {}
         data = {}
-        
         for stock in stock_list:
             stock_str = str(stock)
             stock_str = stock_str.replace("'",'')
@@ -55,37 +54,11 @@ def get_history_data(stock_list,periods):
             data[stock]['close'] = data[stock].pop('Close')
             data[stock]['volume'] = data[stock].pop('Volume')
         return data
-
-""" def get_adx(data,stock_list):
-    adx = {}
-    for stock in stock_list:        
-        adx[stock] = talib.ADX(data[stock].High,data[stock].Low,data[stock].Close, timeperiod = 14)
-        print(adx[stock])
-    return(adx)
-def get_rsi(data,stock_list):
-    rsi = {}
-    for stock in stock_list:        
-        rsi[stock] = talib.RSI(data[stock].Close, timeperiod = 14)
-        print(rsi[stock]) """
-""" def ta_list(data,stock_list):
+        
+def ta_list(data,stock):
     ta_list = get_functions()
-    for x in ta_list:
-        if x != 'MAVP' :
-            #abstract.x(data[stock])
-            try:
-                output = eval(f"abstract.{x}(data['2330.TW'])")
-            except:
-                print(x) 
- """
-def ta_list(data,stock_list,x):
-    ta_list = get_functions()
-    for x in ta_list:
-        if x != 'MAVP' :
-            #abstract.x(data[stock])
-            try:
-                output = eval(f"abstract.{x}(data['2330.TW'])")
-            except:
-                print(x) 
+    output = eval(f"abstract.MA(data['{stock}'])")
+    print(output)
 
 def inflection_point(data, stock_list):
     for stock in stock_list:
