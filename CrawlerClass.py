@@ -37,7 +37,7 @@ class Crawler():
                 except:
                     pass
 
-    def plus_or_minus(self):
+    def plus_or_minus(self, x):
         self.plus = []
         self.minus = []
         for i in range(len(self.stock_data['close'])-1):
@@ -47,10 +47,11 @@ class Crawler():
                 self.minus.append(i+1)
             else:
                 pass
-        self.deal_pom()
+        return self.deal_pom(x)
 
-    def deal_pom(self):
+    def deal_pom(self, x):
         inflection_lst = []
+        point = []
         for i in range(len(self.stock_data['close'])):
             if i in self.plus:
                 if self.inplus(i) not in inflection_lst:
@@ -58,16 +59,30 @@ class Crawler():
             if i in self.minus:
                 if self.inminus(i) not in inflection_lst:
                     inflection_lst.append(self.inminus(i))
-        print(inflection_lst)
-
+        if x == 'y':
+            for x in inflection_lst:
+                point.append(self.stock_data['close'][x])
+            return point
+        else:
+            return(inflection_lst)
+    
     def inplus(self, i):
-        if i not in self.minus and i <= len(self.close):
+        if i not in self.minus and i < len(self.stock_data['close']):
             return(self.inplus(i+1))
         else:
             return(i-1)
 
     def inminus(self, i):
-        if i not in self.plus:
+        if i not in self.plus and i < len(self.stock_data['close']):
             return(self.inminus(i+1))
         else:
             return(i-1)
+            
+    def getStocks():
+        r = requests.get('https://quality.data.gov.tw/dq_download_json.php?nid=11549&md5_url=bb878d47ffbe7b83bfc1b41d0b24946e')
+        json = r.json()
+        id_lst = []
+        for dict in json:
+            id_lst.append(f"{dict['證券代號']}: {dict['證券名稱']}")
+        return id_lst
+

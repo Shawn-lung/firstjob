@@ -13,11 +13,15 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(300, 180)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Expanding, QtWidgets.QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(100)
+        sizePolicy.setVerticalStretch(100)
+        sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
+        Form.setSizePolicy(sizePolicy)
         self.verticalLayoutWidget = QtWidgets.QWidget(Form)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 0, 301, 181))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
-        self.verticalLayout.setSizeConstraint(QtWidgets.QLayout.SizeConstraint.SetNoConstraint)
         self.verticalLayout.setContentsMargins(80, 60, 80, 60)
         self.verticalLayout.setSpacing(10)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -47,6 +51,6 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "看股"))
         self.comboBox.setCurrentText(_translate("Form", "選擇股票"))
         self.pushButton.setText(_translate("Form", "新增觀察視窗"))

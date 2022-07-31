@@ -67,7 +67,17 @@ def get_rsi(data,stock_list):
     for stock in stock_list:        
         rsi[stock] = talib.RSI(data[stock].Close, timeperiod = 14)
         print(rsi[stock]) """
-def ta_list(data,stock_list):
+""" def ta_list(data,stock_list):
+    ta_list = get_functions()
+    for x in ta_list:
+        if x != 'MAVP' :
+            #abstract.x(data[stock])
+            try:
+                output = eval(f"abstract.{x}(data['2330.TW'])")
+            except:
+                print(x) 
+ """
+def ta_list(data,stock_list,x):
     ta_list = get_functions()
     for x in ta_list:
         if x != 'MAVP' :

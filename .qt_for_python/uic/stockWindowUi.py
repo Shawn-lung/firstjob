@@ -18,7 +18,7 @@ class Ui_Form(object):
         self.graphicsView.setGeometry(QtCore.QRect(151, 20, 531, 381))
         self.graphicsView.setObjectName("graphicsView")
         self.resetButton = QtWidgets.QPushButton(Form)
-        self.resetButton.setGeometry(QtCore.QRect(20, 330, 121, 31))
+        self.resetButton.setGeometry(QtCore.QRect(20, 370, 121, 31))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -161,6 +161,9 @@ class Ui_Form(object):
         self.amplitude_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignRight|QtCore.Qt.AlignmentFlag.AlignTrailing|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.amplitude_label.setObjectName("amplitude_label")
         self.formLayout.setWidget(6, QtWidgets.QFormLayout.ItemRole.FieldRole, self.amplitude_label)
+        self.comboBox = QtWidgets.QComboBox(Form)
+        self.comboBox.setGeometry(QtCore.QRect(20, 330, 121, 22))
+        self.comboBox.setObjectName("comboBox")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
