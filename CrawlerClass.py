@@ -1,12 +1,13 @@
 import requests
 import yfinance as yf
 from talib import get_functions ,abstract, MA
-
+import mpl_finance as mpf
 
 class Crawler():
     def __init__(self, stock_code: str):
         self.stock_data = {}
         self.stock_code = stock_code
+        self.olddata = {}
         self.get_history_data(stock_code)
 
         
@@ -16,19 +17,20 @@ class Crawler():
         self.stock_data['previous_close'] = res.json()['data'][0]['chart']['meta']['previousClose']
         self.stock_data['limit_up_price'] = res.json()['data'][0]['chart']['meta']["limitUpPrice"]
         self.stock_data['limit_down_price'] = res.json()['data'][0]['chart']['meta']["limitDownPrice"]
-        olddata = {}
-        olddata = yf.Ticker(self.stock_symbol).history(period='1d', interval='1m')
-        self.stock_data['open'] = olddata['Open']
-        self.stock_data['high'] = olddata['High']
-        self.stock_data['low'] = olddata['Low']
-        self.stock_data['close'] = olddata['Close']
-        self.stock_data['volume'] = olddata['Volume']
+        self.olddata = yf.Ticker(self.stock_symbol).history(period='1d', interval='1m')
+        self.stock_data['open'] = self.olddata['Open']
+        self.stock_data['high'] = self.olddata['High']
+        self.stock_data['low'] = self.olddata['Low']
+        self.stock_data['close'] = self.olddata['Close']
+        self.stock_data['volume'] = self.olddata['Volume']
         #self.stock_data['Datetime'] = olddata['Datetime']
         self.stock_data['updown'] = self.stock_data['close'][-1] - self.stock_data['previous_close']
         self.stock_data['percentage'] = self.stock_data['updown'] / self.stock_data['previous_close'] * 100
         self.stock_data['amplitude'] = sorted(self.stock_data['close'])[-1] - sorted(self.stock_data['close'])[0]
         
-
+    def kgraph(self):
+        graph = mpf.plot(self.olddata, type="candle", title="Candlestick for MSFT", ylabel="price($)")
+        return graph.show()
     
     def ta_list_MA(self):
         return MA(self.stock_data['close'])

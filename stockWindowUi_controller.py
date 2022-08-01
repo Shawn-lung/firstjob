@@ -29,7 +29,6 @@ class stockWindowUiController(QWidget):
         self.ui.up_down_percentage_label.setText(f'{round(crawler.stock_data["percentage"], 2)}%')
         self.ui.amplitude_label.setText(str(round(crawler.stock_data['amplitude'], 2)))
         
-
         plotItem = pg.PlotItem(title=crawler.stock_symbol)
         plotItem.plot(y=crawler.stock_data['close'], pen='green')
         plotItem.plot(y=crawler.ta_list_MA(), pen='r')
