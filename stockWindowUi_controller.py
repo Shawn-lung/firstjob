@@ -12,14 +12,38 @@ class stockWindowUiController(QWidget):
 
         self.stock_code = stock_code
         self.updateData()
-        self.ui.resetButton.clicked.connect(self.onResetButtonClicked)
+        self.ui.resetButton.clicked.connect(self.updateData)
 
-    def onResetButtonClicked(self):
+        self.ui.IntervalComboBox.addItems(["1m", "5m", "15m", "30m", "1h", "1d", "1wk", "1mo"])
+        self.ui.IntervalComboBox.currentIndexChanged.connect(self.intervalComboBoxChangeEvent)
+        self.ui.PeriodComboBox.currentIndexChanged.connect(self.updateData)
+
+    def intervalComboBoxChangeEvent(self):
+        self.ui.PeriodComboBox.clear()
+        match self.ui.IntervalComboBox.currentText():
+            case "1m":
+                self.ui.PeriodComboBox.addItems(["1d", "5d"])
+            case "5m":
+                self.ui.PeriodComboBox.addItems(["1d", "5d", "1mo"])
+            case "15m":
+                self.ui.PeriodComboBox.addItems(["1d", "5d", "1mo"])
+            case "30m":
+                self.ui.PeriodComboBox.addItems(["1d", "5d", "1mo"])
+            case "1h":
+                self.ui.PeriodComboBox.addItems(["1d", "5d", "1mo", "3mo", "6mo", "1y"])
+            case "1d":
+                self.ui.PeriodComboBox.addItems(["1mo", "3mo", "6mo", "1y", "2y"])
+            case "1wk":
+                self.ui.PeriodComboBox.addItems(["1mo", "3mo", "6mo", "1y", "2y"])
+            case "1mo":
+                self.ui.PeriodComboBox.addItems(["1y", "2y", "5y", "10y", "max"])
         self.updateData()
-        
+
     def updateData(self):
         crawler = Crawler(self.stock_code)
-        
+        crawler.setIntervalPeriod(interval=self.ui.IntervalComboBox.currentText(), period=self.ui.PeriodComboBox.currentText())
+        crawler.get_history_data(self.stock_code)
+
         self.ui.privious_close_label.setText(str(crawler.stock_data['previous_close']))
         self.ui.open_label.setText(str(round(crawler.stock_data['open'][0], 2)))
         self.ui.limit_up_price_label.setText(str(crawler.stock_data['limit_up_price']))
