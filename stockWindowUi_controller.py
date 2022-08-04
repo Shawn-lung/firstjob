@@ -1,7 +1,12 @@
 from PyQt6.QtWidgets import QWidget
 from PyQt6.QtCore import QTimer
+import PyQt6.QtWidgets
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
+from matplotlib import pyplot
 from stockWindowUi import Ui_Form
 from CrawlerClass import Crawler
+import random
 import pyqtgraph as pg
 
 class stockWindowUiController(QWidget):
@@ -53,15 +58,33 @@ class stockWindowUiController(QWidget):
         self.ui.up_down_percentage_label.setText(f'{round(crawler.stock_data["percentage"], 2)}%')
         self.ui.amplitude_label.setText(str(round(crawler.stock_data['amplitude'], 2)))
         
-        plotItem = pg.PlotItem(title=crawler.stock_symbol)
+        self.figure = pyplot.figure()
+        self.canvas = FigureCanvasQTAgg(self.figure)
+        self.toolbar = NavigationToolbar2QT(self.canvas, self.ui.verticalWidget)
+  
+        layout = PyQt6.QtWidgets.QVBoxLayout()
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.canvas)
+        self.ui.verticalWidget.setLayout(layout)
+
+        data = [random.random() for i in range(10)]
+        # clearing old figure
+        self.figure.clear()
+        # create an axis
+        ax = self.figure.add_subplot(111)
+        # plot data
+        ax.plot(data, '*-')
+
+        self.canvas.draw()
+        """ plotItem = pg.PlotItem(title=crawler.stock_symbol)
         plotItem.plot(y=crawler.stock_data['close'], pen='green')
         plotItem.plot(y=crawler.ta_list_MA(), pen='r')
-        plotItem.plot(x=crawler.plus_or_minus('x'), y=crawler.plus_or_minus('y'), symbol='star')
+        plotItem.plot(x=crawler.plus_or_minus('x'), y=crawler.plus_or_minus('y'), pen = 'green', symbol='star')
 
-        self.ui.graphicsView.setCentralItem(plotItem)
+        self.ui.graphicsView.setCentralItem(plotItem) """
         
         
-        print("updateData")
+        print("data updated")
         timer = QTimer()
         timer.timeout.connect(self.updateData)
 
