@@ -1,22 +1,12 @@
-import time
-import requests
-from CrawlerClass import Crawler
-import numpy as np
-import pandas as pd
-import mplfinance as mpf
-import matplotlib.pyplot as plt
-import pandas_datareader.data as web
-from talib import abstract, get_functions
-from datetime import datetime, timedelta
+if self.canvas:
+    self.hLayoutMap.removeWidget(self.canvas)
+    sip.delete(self.canvas)
+    plt.cla
+    plt.clf()
+    plt.close(self.canvas)
 
-crawler = Crawler('2330')
-""" stock = 'stock'
-data = {'stock': []}
-data['stock'].append(crawler.olddata) """
-data  = crawler.olddata
-
-
-function = get_functions()[1]
-
-print(eval(f'abstract.{function}(data)'))
-
+aps = [mpf.make_addplot(somedata, kwargs, ...),
+       mpf.make_addplot(otherdata, kwargs, ...), ]
+fig, axlist = mpf.plot(self.df, returnfig=True, addplot=aps, volume=True)
+canvas = FigureCanvasQTAgg(fig)
+self.hLayoutMap.addWidget(canvas)

@@ -313,7 +313,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QComboBox" name="IntervalComboBox">
+      <widget class="QComboBox" name="intervalComboBox">
        <property name="editable">
         <bool>true</bool>
        </property>
@@ -323,12 +323,25 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="PeriodComboBox">
+      <widget class="QComboBox" name="periodComboBox">
        <property name="editable">
         <bool>true</bool>
        </property>
        <property name="currentText">
         <string>1d</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="indicatorComboBox">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="currentText">
+        <string/>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
        </property>
       </widget>
      </item>
@@ -369,27 +382,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="verticalWidget" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>530</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="baseSize">
-      <size>
-       <width>0</width>
-       <height>0</height>
-      </size>
-     </property>
-     <layout class="QVBoxLayout" name="plotLayout"/>
-    </widget>
+    <layout class="QVBoxLayout" name="plotLayout"/>
    </item>
   </layout>
  </widget>

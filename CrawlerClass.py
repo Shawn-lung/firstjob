@@ -3,7 +3,7 @@ import yfinance as yf
 from talib import get_functions ,abstract, MA
 import mplfinance as mpf
 import matplotlib.pyplot as plt
-
+import pandas as pd
 class Crawler():
     def __init__(self, stock_code: str):
         self.stock_data = {}
@@ -37,9 +37,15 @@ class Crawler():
 
 
     def kgraph(self):
-        graph = mpf.plot(self.olddata, type="candle", title="Candlestick for MSFT", ylabel="price($)")
-        graph = plt.plot(self.plus_or_minus("y"))
-        return plt.figure()
+        mc = mpf.make_marketcolors(
+        up="red",  
+        down="green",  
+        edge="black",  
+        volume="blue", 
+        wick="black"  )
+        style = mpf.make_mpf_style(base_mpl_style="ggplot", marketcolors=mc)
+        mpf.plot(self.olddata, type="candle", title="Candlestick", volume = True, ylabel="price($)" , style = style , returnfig = True ,mav = (5,10,20))
+        return mpf.figure()
     
     def ta_list_MA(self):
         return MA(self.stock_data["close"])
