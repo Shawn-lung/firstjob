@@ -4,6 +4,8 @@ from talib import get_functions ,abstract, MA
 import mplfinance as mpf
 import matplotlib.pyplot as plt
 import pandas as pd
+import enum
+from numpy import nan
 class Crawler():
     def __init__(self, stock_code: str):
         self.stock_data = {}
@@ -56,32 +58,66 @@ class Crawler():
     def plus_or_minus(self, x):
         self.plus = []
         self.minus = []
-        for i in range(len(self.stock_data["close"])-1):
+        for i in range(1,len(self.stock_data["close"])-1):
             if self.stock_data["close"][i+1] > self.stock_data["close"][i]:
                 self.plus.append(i+1)
             elif self.stock_data["close"][i+1] < self.stock_data["close"][i]:
                 self.minus.append(i+1)
             else:
                 pass
-        return self.deal_pom(x)
+        return(self.deal_pom(x))
 
     def deal_pom(self, x):
-        inflection_lst = []
-        point = []
+        self.inflection_lst = [0]
+        self.point = []
+        timelst = []
         for i in range(len(self.stock_data["close"])):
             if i in self.plus:
-                if self.inplus(i) not in inflection_lst:
-                    inflection_lst.append(self.inplus(i))
+                if self.inplus(i) not in self.inflection_lst:
+                    self.inflection_lst.append(self.inplus(i))
             if i in self.minus:
-                if self.inminus(i) not in inflection_lst:
-                    inflection_lst.append(self.inminus(i))
+                if self.inminus(i) not in self.inflection_lst:
+                    self.inflection_lst.append(self.inminus(i))
         if x == "y":
-            for x in inflection_lst:
-                point.append(self.stock_data["close"][x])
-            return point
+            for x in self.inflection_lst:
+                self.point.append(self.stock_data["close"][x])
+                timelst.append(self.stock_data['close'].index[x])
+            for i in range(len(self.stock_data['close'])):
+                if i not in self.inflection_lst:
+                    self.point.insert(i , nan)  
+            self.lineCompletion(self.point)
+            df = pd.DataFrame(self.point, columns= ['point'])
+            df.index = self.stock_data['close'].index
+            return df
         else:
-            return(inflection_lst)
+            return(self.inflection_lst)
     
+    def lineCompletion(self, lst):
+        nan_num = 0
+        for i in range(len(lst)):
+            if lst[i] is nan:
+                nan_num += 1
+            elif nan_num != 0:
+                for j in range(1, nan_num+1):
+                    lst[i-j] = lst[i] - (j*(lst[i]-lst[i-nan_num-1])/(nan_num+1))
+                nan_num = 0
+                
+    def line(self):
+        for i in range(len(self.stock_data['close'])):
+            if i not in self.inflection_lst:
+                start = self.stock_data['close'][i]
+                self.isnan(start , i , 1)
+                
+    def isnan(self,start,i,n):
+        if i not in self.inflection_lst:
+            return(self.isnan(start,i+1,n+1))
+        else:
+            newstart = start
+            for x in range(n-1):
+                newstart+=((self.stock_data['close'][i] - start )/n)
+                self.point.insert(i-n+x+1,newstart)
+                self.inflection_lst.insert(i-n+x+1 , i-n+x+1) 
+
     def inplus(self, i):
         if i not in self.minus and i < len(self.stock_data["close"]):
             return(self.inplus(i+1))
