@@ -53,7 +53,9 @@ class Crawler():
         return MA(self.stock_data["close"])
 
     def ta_list(self, function):
+        print(eval(f"abstract.{function}(self.olddata)"))
         return(eval(f"abstract.{function}(self.olddata)"))
+
 
     def plus_or_minus(self, x):
         self.plus = []

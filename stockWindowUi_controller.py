@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout 
 from PyQt6.QtCore import QTimer
 from PyQt6 import sip
+from PyQt6 import QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
@@ -16,11 +17,19 @@ class stockWindowUiController(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(parent)
 
-        self.figure = mpf.figure()
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.ui.plotLayout.addWidget(self.toolbar)
-        self.ui.plotLayout.addWidget(self.canvas)
+        self.indicatorFigure1 = plt.figure()
+        self.indicatorCanvas1 = FigureCanvas(self.indicatorFigure1)
+        self.indicatorToolbar1 = NavigationToolbar(self.indicatorCanvas1, self)
+        self.indicatorFigure2 = plt.figure()
+        self.indicatorCanvas2 = FigureCanvas(self.indicatorFigure2)
+        self.indicatorToolbar2 = NavigationToolbar(self.indicatorCanvas2, self)
+        self.mainFigure = mpf.figure()
+        self.mainCanvas = FigureCanvas(self.mainFigure)
+        self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
+        self.ui.plotLayout.addWidget(self.indicatorCanvas1)
+        self.ui.plotLayout.addWidget(self.indicatorCanvas2)
+        #self.ui.plotLayout.addWidget(self.indicatorToolbar1)
+        #self.ui.plotLayout.addWidget(self.indicatorToolbar2)
 
         self.ui.indicatorComboBox.addItems([ 'HT_DCPERIOD', 'HT_DCPHASE', 'HT_PHASOR', 'HT_SINE', 'HT_TRENDMODE', 'ADD', 'DIV', 'MAX', 'MAXINDEX', 'MIN', 'MININDEX', 'MINMAX', 'MINMAXINDEX', 'MULT', 'SUB', 'SUM', 'ACOS', 'ASIN', 'ATAN', 'CEIL', 'COS', 'COSH', 'EXP', 'FLOOR', 'LN', 'LOG10', 'SIN', 'SINH', 'SQRT', 'TAN', 'TANH', 'ADX', 'ADXR', 'APO', 'AROON', 'AROONOSC', 'BOP', 'CCI', 'CMO', 'DX', 'MACD', 'MACDEXT', 'MACDFIX', 'MFI', 'MINUS_DI', 'MINUS_DM', 'MOM', 'PLUS_DI', 'PLUS_DM', 'PPO', 'ROC', 'ROCP', 'ROCR', 'ROCR100', 'RSI', 'STOCH', 'STOCHF', 'STOCHRSI', 'TRIX', 'ULTOSC', 'WILLR', 'BBANDS', 'DEMA', 'EMA', 'HT_TRENDLINE', 'KAMA', 'MA', 'MAMA', 'MIDPOINT', 'MIDPRICE', 'SAR', 'SAREXT', 'SMA', 'T3', 'TEMA', 'TRIMA', 'WMA', 'CDL2CROWS', 'CDL3BLACKCROWS', 'CDL3INSIDE', 'CDL3LINESTRIKE', 'CDL3OUTSIDE', 'CDL3STARSINSOUTH', 'CDL3WHITESOLDIERS', 'CDLABANDONEDBABY', 'CDLADVANCEBLOCK', 'CDLBELTHOLD', 'CDLBREAKAWAY', 'CDLCLOSINGMARUBOZU', 'CDLCONCEALBABYSWALL', 'CDLCOUNTERATTACK', 'CDLDARKCLOUDCOVER', 'CDLDOJI', 'CDLDOJISTAR', 'CDLDRAGONFLYDOJI', 'CDLENGULFING', 'CDLEVENINGDOJISTAR', 'CDLEVENINGSTAR', 'CDLGAPSIDESIDEWHITE', 'CDLGRAVESTONEDOJI', 'CDLHAMMER', 'CDLHANGINGMAN', 'CDLHARAMI', 'CDLHARAMICROSS', 'CDLHIGHWAVE', 'CDLHIKKAKE', 'CDLHIKKAKEMOD', 'CDLHOMINGPIGEON', 'CDLIDENTICAL3CROWS', 'CDLINNECK', 'CDLINVERTEDHAMMER', 'CDLKICKING', 'CDLKICKINGBYLENGTH', 'CDLLADDERBOTTOM', 'CDLLONGLEGGEDDOJI', 'CDLLONGLINE', 'CDLMARUBOZU', 'CDLMATCHINGLOW', 'CDLMATHOLD', 'CDLMORNINGDOJISTAR', 'CDLMORNINGSTAR', 'CDLONNECK', 'CDLPIERCING', 'CDLRICKSHAWMAN', 'CDLRISEFALL3METHODS', 'CDLSEPARATINGLINES', 'CDLSHOOTINGSTAR', 'CDLSHORTLINE', 'CDLSPINNINGTOP', 'CDLSTALLEDPATTERN', 'CDLSTICKSANDWICH', 'CDLTAKURI', 'CDLTASUKIGAP', 'CDLTHRUSTING', 'CDLTRISTAR', 'CDLUNIQUE3RIVER', 'CDLUPSIDEGAP2CROWS', 'CDLXSIDEGAP3METHODS', 'AVGPRICE', 'MEDPRICE', 'TYPPRICE', 'WCLPRICE', 'BETA', 'CORREL', 'LINEARREG', 'LINEARREG_ANGLE', 'LINEARREG_INTERCEPT', 'LINEARREG_SLOPE', 'STDDEV', 'TSF', 'VAR', 'ATR', 'NATR', 'TRANGE', 'AD', 'ADOSC', 'OBV'])
         self.ui.indicatorComboBox2.addItems([ 'HT_DCPERIOD', 'HT_DCPHASE', 'HT_PHASOR', 'HT_SINE', 'HT_TRENDMODE', 'ADD', 'DIV', 'MAX', 'MAXINDEX', 'MIN', 'MININDEX', 'MINMAX', 'MINMAXINDEX', 'MULT', 'SUB', 'SUM', 'ACOS', 'ASIN', 'ATAN', 'CEIL', 'COS', 'COSH', 'EXP', 'FLOOR', 'LN', 'LOG10', 'SIN', 'SINH', 'SQRT', 'TAN', 'TANH', 'ADX', 'ADXR', 'APO', 'AROON', 'AROONOSC', 'BOP', 'CCI', 'CMO', 'DX', 'MACD', 'MACDEXT', 'MACDFIX', 'MFI', 'MINUS_DI', 'MINUS_DM', 'MOM', 'PLUS_DI', 'PLUS_DM', 'PPO', 'ROC', 'ROCP', 'ROCR', 'ROCR100', 'RSI', 'STOCH', 'STOCHF', 'STOCHRSI', 'TRIX', 'ULTOSC', 'WILLR', 'BBANDS', 'DEMA', 'EMA', 'HT_TRENDLINE', 'KAMA', 'MA', 'MAMA', 'MIDPOINT', 'MIDPRICE', 'SAR', 'SAREXT', 'SMA', 'T3', 'TEMA', 'TRIMA', 'WMA', 'CDL2CROWS', 'CDL3BLACKCROWS', 'CDL3INSIDE', 'CDL3LINESTRIKE', 'CDL3OUTSIDE', 'CDL3STARSINSOUTH', 'CDL3WHITESOLDIERS', 'CDLABANDONEDBABY', 'CDLADVANCEBLOCK', 'CDLBELTHOLD', 'CDLBREAKAWAY', 'CDLCLOSINGMARUBOZU', 'CDLCONCEALBABYSWALL', 'CDLCOUNTERATTACK', 'CDLDARKCLOUDCOVER', 'CDLDOJI', 'CDLDOJISTAR', 'CDLDRAGONFLYDOJI', 'CDLENGULFING', 'CDLEVENINGDOJISTAR', 'CDLEVENINGSTAR', 'CDLGAPSIDESIDEWHITE', 'CDLGRAVESTONEDOJI', 'CDLHAMMER', 'CDLHANGINGMAN', 'CDLHARAMI', 'CDLHARAMICROSS', 'CDLHIGHWAVE', 'CDLHIKKAKE', 'CDLHIKKAKEMOD', 'CDLHOMINGPIGEON', 'CDLIDENTICAL3CROWS', 'CDLINNECK', 'CDLINVERTEDHAMMER', 'CDLKICKING', 'CDLKICKINGBYLENGTH', 'CDLLADDERBOTTOM', 'CDLLONGLEGGEDDOJI', 'CDLLONGLINE', 'CDLMARUBOZU', 'CDLMATCHINGLOW', 'CDLMATHOLD', 'CDLMORNINGDOJISTAR', 'CDLMORNINGSTAR', 'CDLONNECK', 'CDLPIERCING', 'CDLRICKSHAWMAN', 'CDLRISEFALL3METHODS', 'CDLSEPARATINGLINES', 'CDLSHOOTINGSTAR', 'CDLSHORTLINE', 'CDLSPINNINGTOP', 'CDLSTALLEDPATTERN', 'CDLSTICKSANDWICH', 'CDLTAKURI', 'CDLTASUKIGAP', 'CDLTHRUSTING', 'CDLTRISTAR', 'CDLUNIQUE3RIVER', 'CDLUPSIDEGAP2CROWS', 'CDLXSIDEGAP3METHODS', 'AVGPRICE', 'MEDPRICE', 'TYPPRICE', 'WCLPRICE', 'BETA', 'CORREL', 'LINEARREG', 'LINEARREG_ANGLE', 'LINEARREG_INTERCEPT', 'LINEARREG_SLOPE', 'STDDEV', 'TSF', 'VAR', 'ATR', 'NATR', 'TRANGE', 'AD', 'ADOSC', 'OBV'])
@@ -35,7 +44,6 @@ class stockWindowUiController(QWidget):
         self.stock_code = stock_code
         self.updateData()
         self.ui.resetButton.clicked.connect(self.updateData)
-
 
     def intervalComboBoxChangeEvent(self):
         self.ui.periodComboBox.clear()
@@ -72,40 +80,45 @@ class stockWindowUiController(QWidget):
         self.ui.up_down_percentage_label.setText(f'{round(crawler.stock_data["percentage"], 2)}%')
         self.ui.amplitude_label.setText(str(round(crawler.stock_data['amplitude'], 2)))
         
-
-        if self.canvas:
-            self.ui.plotLayout.removeWidget(self.canvas)
-            self.ui.plotLayout.removeWidget(self.toolbar)
-            sip.delete(self.canvas)
+        if self.mainCanvas:
+            self.ui.plotLayout.removeWidget(self.mainCanvas)
+            self.ui.plotLayout.removeWidget(self.mainToolbar)
+            sip.delete(self.mainCanvas)
             plt.cla
             plt.clf()
-            plt.close(self.figure)
-        
+            plt.close(self.mainFigure)
+
         mc = mpf.make_marketcolors(
-        up="red",  
-        down="green",  
-        edge="black",  
-        volume="blue", 
-        wick="black"  )
+            up="red",  
+            down="green",  
+            edge="black",  
+            volume="blue", 
+            wick="black")
+        
         style = mpf.make_mpf_style(base_mpl_style="ggplot", marketcolors=mc)
-        ap = [mpf.make_addplot(crawler.plus_or_minus('y'),type='line', width=0.9)]
-        #ap.append(mpf.make_addplot(crawler.ta_list(self.ui.indicatorComboBox.currentText())))
+        ap = [mpf.make_addplot(crawler.plus_or_minus('y'),type='line', width=0.7 )]
+        ap.append(mpf.make_addplot(crawler.ta_list(self.ui.indicatorComboBox.currentText()),width = 0.7 , color = 'black' ))
+        self.mainFigure, mainAxlst = mpf.plot(crawler.olddata, type="candle", style=style, volume = True, ylabel="price($)", returnfig=True, addplot=ap)
+        mainAxlst[0].set_title(crawler.stock_symbol)
 
-        self.figure, axlst = mpf.plot(crawler.olddata, type="candle", style=style, volume = True, ylabel="price($)", returnfig = True, addplot=ap)
+        self.mainCanvas = FigureCanvas(self.mainFigure)
+        self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
+        self.indicatorCanvas1 = FigureCanvas(self.indicatorFigure1)
+        self.indicatorToolbar1 = NavigationToolbar(self.indicatorCanvas1, self)
 
-        axlst[0].set_title(crawler.stock_symbol)
-        self.canvas = FigureCanvas(self.figure)
-        self.toolbar = NavigationToolbar(self.canvas, self)
-        self.ui.plotLayout.addWidget(self.toolbar)
-        self.ui.plotLayout.addWidget(self.canvas)
-
-        """ plotItem = pg.PlotItem(title=crawler.stock_symbol)
-        plotItem.plot(y=crawler.stock_data['close'], pen='green')
-        plotItem.plot(y=crawler.ta_list_MA(), pen='r')
-        plotItem.plot(x=crawler.plus_or_minus('x'), y=crawler.plus_or_minus('y'), pen = 'green', symbol='star')
-        self.ui.graphicsView.setCentralItem(plotItem) """
+        self.ui.plotLayout.insertWidget(0, self.mainCanvas)
+        self.ui.plotLayout.insertWidget(0, self.mainToolbar)
         
-        
+        self.indicatorFigure1.clear()
+        ax1 = self.indicatorFigure1.add_subplot(111)
+        ax1.plot(crawler.ta_list(self.ui.indicatorComboBox2.currentText()))
+        self.indicatorCanvas1.draw()
+
+        self.indicatorFigure2.clear()
+        ax2 = self.indicatorFigure2.add_subplot(111)
+        ax2.plot(crawler.ta_list(self.ui.indicatorComboBox3.currentText()))
+        self.indicatorCanvas2.draw()
+
         print("data updated")
         timer = QTimer()
         timer.timeout.connect(self.updateData)
