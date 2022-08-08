@@ -16,31 +16,27 @@
     <verstretch>100</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>13</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>看股</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>10</number>
-     </property>
-     <property name="leftMargin">
-      <number>50</number>
-     </property>
      <property name="topMargin">
-      <number>40</number>
-     </property>
-     <property name="rightMargin">
       <number>50</number>
      </property>
      <property name="bottomMargin">
-      <number>40</number>
+      <number>50</number>
      </property>
      <item>
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="stockComboBox">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -54,7 +50,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="showStockWindowPushButton">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -67,7 +63,46 @@
         </font>
        </property>
        <property name="text">
-        <string>新增觀察視窗</string>
+        <string>新增股票視窗</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="topMargin">
+      <number>50</number>
+     </property>
+     <property name="bottomMargin">
+      <number>50</number>
+     </property>
+     <item>
+      <widget class="QComboBox" name="futuresComboBox_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="currentText">
+        <string>選擇期貨</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="showFuturesWindowPushButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>新增期貨視窗</string>
        </property>
       </widget>
      </item>
