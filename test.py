@@ -1,8 +1,3 @@
-import mplfinance as mpf
-import pandas as pd
-from CrawlerClass import Crawler
-import matplotlib.pyplot as plt
-crawler = Crawler('2330')
-df = pd.DataFrame(crawler.ta_list('MA'))
-plt.plot(df)
-plt.show()
+import requests as request
+url = request.get("https://tw.screener.finance.yahoo.net/future/q?type=ta&perd=d&mkt=01&sym=WTX00&callback=jQuery1113033265881543586406_1659958858733&_=1659958858734v")
+url
