@@ -1,5 +1,6 @@
 import requests 
 import pandas as pd
+import mplfinance as mpf
 payload = {"MarketType":"0",
            "SymbolType":"F",
            "KindID":"1",
@@ -11,13 +12,25 @@ payload = {"MarketType":"0",
            "AscDesc":"A"}
 res = requests.post("https://mis.taifex.com.tw/futures/api/getQuoteList",json = payload)
 data = res.json()
+
 df = pd.DataFrame(data['RtData']['QuoteList'])
+timestamp = df['CTime']
+print(timestamp)
+#timestamp = pd.to_datetime(timestamp)
+print(timestamp)
 df = df[["DispCName" , "CTotalVolume", "COpenPrice", "CHighPrice", "CLowPrice" ,"CLastPrice"]]
+df['name'] = df.pop('DispCName')
+df['open'] = df.pop('COpenPrice')
+df['high'] = df.pop('CHighPrice')
+df['low'] = df.pop('CLowPrice')
+df['close'] = df.pop('CLastPrice')
+df['volume'] = df.pop('CTotalVolume')
 print(df)
-=======
-import requests as request
-import json
-url = request.get("https://tw.screener.finance.yahoo.net/future/q?type=ta&perd=d&mkt=01&sym=WTX00&callback=jQuery1113033265881543586406_1659958858733&_=1659958858734v")
-a = url.text.replace('jQuery1113033265881543586406_1659958858733(','')
-a = a.replace(");",'')
->>>>>>> 168d54d702ad665c821e4828a8ae5253c7e3fd97
+""" mc = mpf.make_marketcolors(
+        up="red",  
+        down="green",  
+        edge="black",  
+        volume="blue", 
+        wick="black")
+style = mpf.make_mpf_style(base_mpl_style="ggplot", marketcolors=mc)
+mpf.plot(df, type="candle", title="Candlestick", volume = True, ylabel="price($)" , style = style , returnfig = True ,mav = (5,10,20)) """
