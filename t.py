@@ -19,7 +19,6 @@ def get_tw_futures(start_year, start_month, start_day, end_year, end_month, end_
         res = http.request(
              'POST',
               url,
-              verify = False,
               fields={
                  'queryType': 2,
                  'marketCode': market_code,
@@ -49,4 +48,4 @@ df = get_tw_futures(start_year = 2022,
                     end_year = 2022, 
                     end_month = 4,
                     end_day = 13)
-df    
+print(df['開盤價'])    
