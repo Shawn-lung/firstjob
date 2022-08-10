@@ -2,9 +2,11 @@
 import urllib3
 from bs4 import BeautifulSoup
 
+from numpy import nan
 #資料處理套件
 import pandas as pd
 from datetime import date
+import mplfinance as mpf
 
 #下載每日期貨交易資訊函式
 def get_tw_futures(start_year, start_month, start_day, end_year, end_month, end_day, market_code = 0):
@@ -47,5 +49,51 @@ df = get_tw_futures(start_year = 2022,
                     start_day = 6,
                     end_year = 2022, 
                     end_month = 4,
-                    end_day = 13)
-print(df['開盤價'])    
+                    end_day = 13)   
+df.index = pd.to_datetime(df['日期'])
+df['open'] = df.pop('開盤價')
+df['high'] = df.pop('最高價')
+df['low'] = df.pop('最低價')
+df['close'] = df.pop('最後成交價')
+""" for i in df['open']:
+    if type(i) != int or type(i) != float:
+        try:
+            i = float(i)
+        except ValueError:
+            i = nan
+for i in df['high']:
+    if type(i) != int or type(i) != float:
+        try:
+            i = float(i)
+        except ValueError:
+            i = nan
+for i in df['low']:
+    if type(i) != int or type(i) != float:
+        try:
+            i = float(i)
+        except ValueError:
+            i = nan
+for i in df['close']:
+    if type(i) != int or type(i) != float:
+        try:
+            i = float(i)
+        except ValueError:
+            i = nan            """  
+for i in range(len(df['open'])):
+    try:
+        df['open'][i] = float(df['open'][i])            
+    except ValueError:
+        df['open'][i] = nan
+    try:
+        df['high'][i] = float(df['high'][i])            
+    except ValueError:
+        df['high'][i] = nan
+    try:
+        df['low'][i] = float(df['low'][i])            
+    except ValueError:
+        df['low'][i] = nan
+    try:
+        df['close'][i] = float(df['close'][i])            
+    except ValueError:
+        df['close'][i] = nan        
+mpf.plot(df)
