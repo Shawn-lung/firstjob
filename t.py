@@ -78,8 +78,13 @@ for i in df['close']:
         try:
             i = float(i)
         except ValueError:
-            i = nan            """  
-for i in range(len(df['open'])):
+            i = nan         """  
+df = {'open' : df['open'] , 'high' : df['high'], 'low' : df['low'] , 'close' : df['close']}
+for i in range(len)
+df = pd.DataFrame(df)
+mpf.plot(df)
+
+""" for i in range(len(df['open'])):
     try:
         df['open'][i] = float(df['open'][i])            
     except ValueError:
@@ -95,5 +100,4 @@ for i in range(len(df['open'])):
     try:
         df['close'][i] = float(df['close'][i])            
     except ValueError:
-        df['close'][i] = nan        
-mpf.plot(df)
+        df['close'][i] = nan       """  
