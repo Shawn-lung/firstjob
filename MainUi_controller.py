@@ -10,13 +10,13 @@ class MainUiController(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.ui.stockComboBox.addItems(Crawler.getStocks())
-        self.ui.futuresComboBox.addItems(Crawler.getFutres())
+        self.ui.futuresComboBox.addItems(Crawler.getFutures())
         self.ui.showStockWindowPushButton.clicked.connect(self.on_stock_button_clicked)
         self.ui.showFuturesWindowPushButton.clicked.connect(self.on_futures_button_clicked)
         self.openedLst = []
 
     def on_stock_button_clicked(self):
-        stock_code = self.ui.stockComboBox.currentText()[:self.ui.comboBox.currentText().find(':')]
+        stock_code = self.ui.stockComboBox.currentText()[:self.ui.stockComboBox.currentText().find(':')]
         self.showStockWindow(stock_code)   
 
     def on_futures_button_clicked(self):
@@ -31,6 +31,6 @@ class MainUiController(QWidget):
     def showFuturesWindow(self, futures_code):
         self.openedLst.append(QWidget())
         self.futuresWindowUi = futuresWindowUiController(self.openedLst[-1], futures_code)
-
+        self.openedLst[-1].show()
 
     

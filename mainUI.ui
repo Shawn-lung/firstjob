@@ -78,7 +78,7 @@
       <number>50</number>
      </property>
      <item>
-      <widget class="QComboBox" name="futuresComboBox_2">
+      <widget class="QComboBox" name="futuresComboBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>

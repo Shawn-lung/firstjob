@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import enum
 from numpy import nan
+
 class Crawler():
     def __init__(self, stock_code: str):
         self.stock_data = {}
@@ -143,3 +144,6 @@ class Crawler():
     def setIntervalPeriod(self, interval="1m", period="1d"):
         self.interval = interval
         self.period = period
+
+    def getFutures():
+        return ["test data"]
