@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QWidget
 from MainUi import Ui_Form
-from CrawlerClass import Crawler
+from CrawlerClass import StockCrawler, FuturesCrawler
 from stockWindowUi_controller import stockWindowUiController
 from futuresWindowUi_controller import futuresWindowUiController
 
@@ -9,8 +9,8 @@ class MainUiController(QWidget):
         super().__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-        self.ui.stockComboBox.addItems(Crawler.getStocks())
-        self.ui.futuresComboBox.addItems(Crawler.getFutures())
+        self.ui.stockComboBox.addItems(StockCrawler.getStocks())
+        self.ui.futuresComboBox.addItems(FuturesCrawler.getFutures())
         self.ui.showStockWindowPushButton.clicked.connect(self.on_stock_button_clicked)
         self.ui.showFuturesWindowPushButton.clicked.connect(self.on_futures_button_clicked)
         self.openedLst = []
@@ -20,7 +20,7 @@ class MainUiController(QWidget):
         self.showStockWindow(stock_code)   
 
     def on_futures_button_clicked(self):
-        futures_code = self.ui.futuresComboBox.currentText()
+        futures_code = self.ui.futuresComboBox.currentText()[:self.ui.futuresComboBox.currentText().find(':')]
         self.showFuturesWindow(futures_code)
 
     def showStockWindow(self, stock_code):

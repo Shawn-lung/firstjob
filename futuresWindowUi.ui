@@ -43,48 +43,6 @@
         <number>5</number>
        </property>
        <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="enabled">
-          <bool>true</bool>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>昨日收盤價</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="privious_close_label">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
         <widget class="QLabel" name="label_2">
          <property name="minimumSize">
           <size>
@@ -98,11 +56,11 @@
           </font>
          </property>
          <property name="text">
-          <string>當天開盤價</string>
+          <string>開盤價</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="0" column="1">
         <widget class="QLabel" name="open_label">
          <property name="font">
           <font>
@@ -117,7 +75,7 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="1" column="0">
         <widget class="QLabel" name="label_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -137,12 +95,45 @@
           </font>
          </property>
          <property name="text">
-          <string>漲停價</string>
+          <string>最高</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="high_price_label">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>最低</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLabel" name="limit_up_price_label">
+        <widget class="QLabel" name="low_price_label">
          <property name="font">
           <font>
            <pointsize>10</pointsize>
@@ -157,39 +148,6 @@
         </widget>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>跌停價</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="limit_down_price_label">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
         <widget class="QLabel" name="label_8">
          <property name="minimumSize">
           <size>
@@ -203,11 +161,11 @@
           </font>
          </property>
          <property name="text">
-          <string>當下股價</string>
+          <string>最後成交價</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="3" column="1">
         <widget class="QLabel" name="close_label">
          <property name="font">
           <font>
@@ -222,43 +180,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>20</height>
-          </size>
-         </property>
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>漲跌幅</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLabel" name="up_down_percentage_label">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_10">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -282,7 +204,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="1">
+       <item row="4" column="1">
         <widget class="QLabel" name="amplitude_label">
          <property name="font">
           <font>
@@ -300,22 +222,12 @@
       </layout>
      </item>
      <item>
-      <widget class="QComboBox" name="intervalComboBox">
-       <property name="editable">
-        <bool>true</bool>
-       </property>
-       <property name="currentText">
-        <string>1m</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QComboBox" name="periodComboBox">
        <property name="editable">
         <bool>true</bool>
        </property>
        <property name="currentText">
-        <string>1d</string>
+        <string>5</string>
        </property>
       </widget>
      </item>
