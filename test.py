@@ -1,4 +1,4 @@
-import requests 
+""" import requests 
 import pandas as pd
 import mplfinance as mpf
 payload = {"MarketType":"0",
@@ -26,11 +26,19 @@ df['low'] = df.pop('CLowPrice')
 df['close'] = df.pop('CLastPrice')
 df['volume'] = df.pop('CTotalVolume')
 print(df)
-""" mc = mpf.make_marketcolors(
+mc = mpf.make_marketcolors(
         up="red",  
         down="green",  
         edge="black",  
         volume="blue", 
         wick="black")
 style = mpf.make_mpf_style(base_mpl_style="ggplot", marketcolors=mc)
-mpf.plot(df, type="candle", title="Candlestick", volume = True, ylabel="price($)" , style = style , returnfig = True ,mav = (5,10,20)) """
+mpf.plot(df, type="candle", title="Candlestick", volume = True, ylabel="price($)" , style = style , returnfig = True ,mav = (5,10,20))  """
+import pandas as pd
+list1 = ['a','b','c']
+list2 = ['1','2','3']
+df = pd.DataFrame(list1)
+df.index = list2
+print(df)
+df.drop(index = '1')
+print(df)

@@ -55,49 +55,18 @@ df['open'] = df.pop('開盤價')
 df['high'] = df.pop('最高價')
 df['low'] = df.pop('最低價')
 df['close'] = df.pop('最後成交價')
-""" for i in df['open']:
-    if type(i) != int or type(i) != float:
-        try:
-            i = float(i)
-        except ValueError:
-            i = nan
-for i in df['high']:
-    if type(i) != int or type(i) != float:
-        try:
-            i = float(i)
-        except ValueError:
-            i = nan
-for i in df['low']:
-    if type(i) != int or type(i) != float:
-        try:
-            i = float(i)
-        except ValueError:
-            i = nan
-for i in df['close']:
-    if type(i) != int or type(i) != float:
-        try:
-            i = float(i)
-        except ValueError:
-            i = nan         """  
-df = {'open' : df['open'] , 'high' : df['high'], 'low' : df['low'] , 'close' : df['close']}
-for i in range(len)
-df = pd.DataFrame(df)
-mpf.plot(df)
 
-""" for i in range(len(df['open'])):
-    try:
-        df['open'][i] = float(df['open'][i])            
-    except ValueError:
-        df['open'][i] = nan
-    try:
-        df['high'][i] = float(df['high'][i])            
-    except ValueError:
-        df['high'][i] = nan
-    try:
-        df['low'][i] = float(df['low'][i])            
-    except ValueError:
-        df['low'][i] = nan
-    try:
-        df['close'][i] = float(df['close'][i])            
-    except ValueError:
-        df['close'][i] = nan       """  
+df = {'open' : df['open'] , 'high' : df['high'], 'low' : df['low'] , 'close' : df['close']}
+df = pd.DataFrame(df)
+df = df.drop(index = df.loc[df['open'] == '-'].index)
+df = df.drop(index = df.loc[df['high'] == '-'].index)
+df = df.drop(index = df.loc[df['low'] == '-'].index)
+df = df.drop(index = df.loc[df['close'] == '-'].index)
+""" df = df.drop(index = df.loc[df['open'] is nan].index)
+df = df.drop(index = df.loc[df['high'] is nan].index)
+df = df.drop(index = df.loc[df['low'] is nan].index)
+df = df.drop(index = df.loc[df['close'] is nan].index)
+ """
+
+print(df)
+mpf.plot(df)
