@@ -22,11 +22,15 @@ class stockWindowUiController(QWidget):
         self.indicatorFigure2 = plt.figure()
         self.indicatorCanvas2 = FigureCanvas(self.indicatorFigure2)
         self.indicatorToolbar2 = NavigationToolbar(self.indicatorCanvas2, self)
+        self.indicatorFigure3 = plt.figure()
+        self.indicatorCanvas3 = FigureCanvas(self.indicatorFigure3)
+        self.indicatorToolbar3 = NavigationToolbar(self.indicatorCanvas3, self)
         self.mainFigure = mpf.figure()
         self.mainCanvas = FigureCanvas(self.mainFigure)
         self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
         self.ui.plotLayout.addWidget(self.indicatorCanvas1)
         self.ui.plotLayout.addWidget(self.indicatorCanvas2)
+        self.ui.plotLayout.addWidget(self.indicatorCanvas3)
         #self.ui.plotLayout.addWidget(self.indicatorToolbar1)
         #self.ui.plotLayout.addWidget(self.indicatorToolbar2)
 
@@ -96,7 +100,6 @@ class stockWindowUiController(QWidget):
         
         style = mpf.make_mpf_style(base_mpl_style="ggplot", marketcolors=mc)
         ap = [mpf.make_addplot(crawler.plus_or_minus('y'),type='line', width=0.7 )]
-        ap.append(mpf.make_addplot(crawler.ta_list(self.ui.indicatorComboBox.currentText()),width = 0.7 , color = 'black' ))
         self.mainFigure, mainAxlst = mpf.plot(crawler.olddata, type="candle", style=style, volume = True, ylabel="price($)", returnfig=True, addplot=ap)
         mainAxlst[0].set_title(crawler.stock_symbol)
 
@@ -108,6 +111,11 @@ class stockWindowUiController(QWidget):
         self.ui.plotLayout.insertWidget(0, self.mainCanvas)
         self.ui.plotLayout.insertWidget(0, self.mainToolbar)
         
+        self.indicatorFigure3.clear()
+        ax3 = self.indicatorFigure3.add_subplot(111)
+        ax3.plot(crawler.ta_list(self.ui.indicatorComboBox.currentText()))
+        self.indicatorCanvas2.draw()
+
         self.indicatorFigure1.clear()
         ax1 = self.indicatorFigure1.add_subplot(111)
         ax1.plot(crawler.ta_list(self.ui.indicatorComboBox2.currentText()))
