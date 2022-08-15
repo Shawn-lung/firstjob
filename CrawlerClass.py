@@ -20,7 +20,6 @@ class StockCrawler():
         self.stock_data["limit_up_price"] = res.json()["data"][0]["chart"]["meta"]["limitUpPrice"]
         self.stock_data["limit_down_price"] = res.json()["data"][0]["chart"]["meta"]["limitDownPrice"]
         self.stock_data["today_open"] = res.json()["data"][0]["chart"]["indicators"]["quote"][0]["open"]
-
         self.olddata = yf.Ticker(self.stock_symbol).history(interval = self.interval , period = self.period)
         self.stock_data["open"] = self.olddata["Open"]
         self.stock_data["high"] = self.olddata["High"]
@@ -61,23 +60,31 @@ class StockCrawler():
             if i in self.plus:
                 if self.inplus(i) not in self.inflection_lst:
                     self.inflection_lst.append(self.inplus(i))
+                    self.lastmax_x = self.inplus(i)
             if i in self.minus:
                 if self.inminus(i) not in self.inflection_lst:
                     self.inflection_lst.append(self.inminus(i))
+                    self.lastmin_x = self.inminus(i)
         if x == "y":
             for x in self.inflection_lst:
                 self.point.append(self.stock_data["close"][x])
+                if x in self.plus:
+                    self.lastmax_y = self.stock_data["close"][x]
+                else:
+                    self.lastmin_y = self.stock_data["close"][x]    
                 timelst.append(self.stock_data['close'].index[x])
             for i in range(len(self.stock_data['close'])):
                 if i not in self.inflection_lst:
                     self.point.insert(i , nan)  
             self.lineCompletion(self.point)
-            df = pd.DataFrame(self.point, columns= ['point'])
-            df.index = self.stock_data['close'].index
-            return df
+            self.dfpoint = pd.DataFrame(self.point, columns= ['point'])
+            self.dfpoint.index = self.stock_data['close'].index
+            return self.dfpoint
         else:
             return(self.inflection_lst)
     
+
+
     def lineCompletion(self, lst):
         nan_num = 0
         for i in range(len(lst)):
@@ -161,17 +168,33 @@ class FuturesCrawler():
     def get_tw_futures(self):
         res = requests.get(self.url)
         futuredata = res.json()['data']
-        time = pd.to_datetime(futuredata['t'],unit='s')
-        futuredata = pd.DataFrame({'open' : futuredata['o'], 'high' : futuredata['h'], 'low' : futuredata['l'], 'close' : futuredata['c'], 'volume' : futuredata['v']},index=time)
+        time = pd.to_datetime([i+3600*8 for i in futuredata['t']],unit='s')
+        if self.flag:
+            try:        
+                futuredata = pd.DataFrame({'open' : list(reversed(futuredata['o'][:self.flag1])), 'high' : list(reversed(futuredata['h'][:self.flag1])), 'low' : list(reversed(futuredata['l'][:self.flag1])), 'close' : list(reversed(futuredata['c'][:self.flag1])), 'volume' : list(reversed(futuredata['v'][:self.flag1]))},index=list(reversed(time[:self.flag1])))
+            except:
+                futuredata = pd.DataFrame({'open' : list(reversed(futuredata['o'])), 'high' : list(reversed(futuredata['h'])), 'low' : list(reversed(futuredata['l'])), 'close' : list(reversed(futuredata['c'])), 'volume' : list(reversed(futuredata['v']))},index=list(reversed(time)))
+        else:
+            futuredata = pd.DataFrame({'open' : list(reversed(futuredata['o'])), 'high' : list(reversed(futuredata['h'])), 'low' : list(reversed(futuredata['l'])), 'close' : list(reversed(futuredata['c'])), 'volume' : list(reversed(futuredata['v']))},index=list(reversed(time)))
         self.df = futuredata
-    
+
     def setIntervalPeriod(self, interval="1m", period="1d"):
         self.interval = interval
         self.period = period
         self.ftime = str(int(datetime.timestamp(datetime.now())))
         days = 1
+        self.flag = False
+        self.flag1 = 60
         #period設定抓幾天的資料後用timedelta來減
         match self.period:
+            case "1h":
+                days = 1
+                self.flag = True
+                self.flag1 = 60
+            case "2h":
+                days = 1
+                self.flag = True
+                self.flag1 = 120
             case "1d":
                 days = 1
             case "1mo":

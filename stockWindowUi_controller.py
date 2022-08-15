@@ -1,11 +1,9 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QMessageBox
+from PyQt6.QtWidgets import QWidget, QMessageBox
 from PyQt6.QtCore import QTimer
 from PyQt6 import sip
-from PyQt6 import QtCore
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib import pyplot as plt
-from matplotlib.figure import Figure
 from stockWindowUi import Ui_Form
 from CrawlerClass import StockCrawler
 import mplfinance as mpf
@@ -40,6 +38,9 @@ class stockWindowUiController(QWidget):
         self.ui.indicatorComboBox2.currentIndexChanged.connect(self.updateData)
         self.ui.indicatorComboBox3.currentIndexChanged.connect(self.updateData)
 
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.updateData)
+
         self.stock_code = stock_code
         self.updateData()
         self.ui.resetButton.clicked.connect(self.updateData)
@@ -48,7 +49,7 @@ class stockWindowUiController(QWidget):
         self.ui.periodComboBox.clear()
         match self.ui.intervalComboBox.currentText():
             case "1m":
-                self.ui.periodComboBox.addItems(["1d", "5d"])
+                self.ui.periodComboBox.addItems(["1h", "2h", "1d", "5d"])
             case "5m":
                 self.ui.periodComboBox.addItems(["1d", "5d", "1mo"])
             case "15m":
@@ -65,7 +66,11 @@ class stockWindowUiController(QWidget):
                 self.ui.periodComboBox.addItems(["1y", "2y", "5y", "10y", "max"])
         self.updateData()
 
+    def oneMinute(self):
+        self.timer.start(60000)
+
     def updateData(self):
+        print('data updated')
         crawler = StockCrawler(self.stock_code)
         crawler.setIntervalPeriod(interval=self.ui.intervalComboBox.currentText(), period=self.ui.periodComboBox.currentText())
         crawler.get_history_data(self.stock_code)
@@ -116,5 +121,5 @@ class stockWindowUiController(QWidget):
         self.subAx.plot(crawler.ta_list(self.ui.indicatorComboBox2.currentText()))
         self.subAx.plot(crawler.ta_list(self.ui.indicatorComboBox3.currentText()))
         self.indicatorCanvas.draw()
-
+        self.oneMinute()
 

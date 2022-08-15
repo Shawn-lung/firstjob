@@ -1,11 +1,12 @@
+from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QWidget
 from PyQt6 import sip
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-import mplfinance as mpf
 from futuresWindowUi import Ui_Form
 from CrawlerClass import FuturesCrawler
+import mplfinance as mpf
 
 class futuresWindowUiController(QWidget):
     def __init__(self, parent, futures_code, futures_index):
@@ -36,16 +37,22 @@ class futuresWindowUiController(QWidget):
         self.ui.indicatorComboBox2.currentIndexChanged.connect(self.updateData)
         self.ui.indicatorComboBox3.currentIndexChanged.connect(self.updateData)
         
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.updateData)
+        
         self.futures_code = futures_code
         self.futures_index = futures_index
-        self.updateData()                
+        self.updateData()
         self.ui.resetButton.clicked.connect(self.updateData)
+                      
+    def oneMinute(self):
+        self.timer.start(60000)
 
     def intervalComboBoxChangeEvent(self):
         self.ui.periodComboBox.clear()
         match self.ui.intervalComboBox.currentText():
             case "1m":
-                self.ui.periodComboBox.addItem("1d")
+                self.ui.periodComboBox.addItems(["1h", "2h", "1d"])
             case "1d":
                 self.ui.periodComboBox.addItems(["1mo", "3mo", "6mo", "1y"])
             case "1w":
@@ -55,6 +62,7 @@ class futuresWindowUiController(QWidget):
         self.updateData()
 
     def updateData(self):
+        print('data updated')
         crawler = FuturesCrawler(self.futures_code, self.futures_index)
         crawler.setIntervalPeriod(interval=self.ui.intervalComboBox.currentText(), period=self.ui.periodComboBox.currentText())
         crawler.get_tw_futures()
@@ -85,6 +93,7 @@ class futuresWindowUiController(QWidget):
         ap = [mpf.make_addplot(crawler.plus_or_minus('y'),type='line', width=0.7 )]
         self.mainFigure, mainAxlst = mpf.plot(crawler.df, type="candle", style=style, volume = True, ylabel="price($)", returnfig=True, addplot=ap)
         mainAxlst[0].set_title(self.futures_code)
+        mainAxlst[0].grid(visible=True, which="both", axis="x", ms=1, markevery=1)
 
         self.mainCanvas = FigureCanvas(self.mainFigure)
         self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
@@ -98,3 +107,4 @@ class futuresWindowUiController(QWidget):
         self.subAx.plot(crawler.ta_list(self.ui.indicatorComboBox2.currentText()))
         self.subAx.plot(crawler.ta_list(self.ui.indicatorComboBox3.currentText()))
         self.indicatorCanvas.draw()
+        self.oneMinute()
