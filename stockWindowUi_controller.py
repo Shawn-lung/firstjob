@@ -108,7 +108,9 @@ class stockWindowUiController(QWidget):
         ap = [mpf.make_addplot(crawler.plus_or_minus('y'),type='line', width=0.7 )]
         self.mainFigure, mainAxlst = mpf.plot(crawler.olddata, type="candle", style=style, volume = True, ylabel="price($)", returnfig=True, addplot=ap)
         mainAxlst[0].set_title(crawler.stock_symbol)
-
+        mainAxlst[0].grid(visible=True, which="both", axis="x", ms=1, markevery=1)
+        mainAxlst[0].plot(crawler.lastmax_x, crawler.lastmax_y,'ro')
+        mainAxlst[0].plot(crawler.lastmin_x, crawler.lastmin_y,'ro')
         self.mainCanvas = FigureCanvas(self.mainFigure)
         self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
 
