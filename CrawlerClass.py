@@ -41,7 +41,10 @@ class StockCrawler():
         print(self.olddata)
     
     def ta_list(self, function):
-        return(eval(f"abstract.{function}(self.olddata)"))
+        if function == "None":
+            return [None]
+        else:
+            return(eval(f"abstract.{function}(self.olddata)"))
 
 
     def plus_or_minus(self, x):
@@ -171,16 +174,19 @@ class FuturesCrawler():
             #加入日期
             df_day.insert(0, '日期', day)
             df = df.append(df_day, ignore_index = True)
+        print(df)
         df['open'] = df.pop('開盤價')
         df['high'] = df.pop('最高價')
         df['low'] = df.pop('最低價')
         df['close'] = df.pop('最後成交價')
-        df = {'open' : df['open'] , 'high' : df['high'], 'low' : df['low'] , 'close' : df['close'] ,'日期' : df['日期']}
+        df['volume'] = df.pop('*合計成交量')
+        df = {'open' : df['open'] , 'high' : df['high'], 'low' : df['low'] , 'close' : df['close'],'volume' : df['volume'] ,'日期' : df['日期']}
         df = pd.DataFrame(df)
         df = df.drop(index = df.loc[df['open'] == '-'].index)
         df = df.drop(index = df.loc[df['high'] == '-'].index)
         df = df.drop(index = df.loc[df['low'] == '-'].index)
-        df = df.drop(index = df.loc[df['close'] == '-'].index) 
+        df = df.drop(index = df.loc[df['close'] == '-'].index)
+        df = df.drop(index = df.loc[df['volume'] == '-'].index)  
         index = list(range(len(df['open'])))
         df.index = index
         for i in range(len(df['open'])):           
@@ -192,6 +198,7 @@ class FuturesCrawler():
         df['high'] = [float(i) for i in df['high']]
         df['low'] = [float(i) for i in df['low']]
         df['close'] = [float(i) for i in df['close']]
+        df['volume'] = [float(i) for i in df['volume']]
         self.df = df
 
     def setStartDate(self,days: int):
@@ -200,8 +207,10 @@ class FuturesCrawler():
         self.end_date = str(date(datetime.now().year, datetime.now().month,datetime.now().day))
 
     def ta_list(self, function):
-        print(eval(f"abstract.{function}(self.df)"))
-        return(eval(f"abstract.{function}(self.df)"))
+        if function == "None":
+            return[None]
+        else:
+            return(eval(f"abstract.{function}(self.df)"))
 
 
     def plus_or_minus(self, x):

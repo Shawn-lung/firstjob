@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>730</width>
+    <width>1000</width>
     <height>352</height>
    </rect>
   </property>
@@ -320,7 +320,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="indicatorComboBox">
+      <widget class="QComboBox" name="indicatorComboBox1">
        <property name="editable">
         <bool>true</bool>
        </property>
