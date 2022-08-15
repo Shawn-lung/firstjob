@@ -69,15 +69,19 @@ class StockCrawler():
                 if self.stock_data["close"][-1] != self.stock_data["close"][x]:
                     if x in self.plus:
                         self.lastmax_y = self.stock_data["close"][x]
-                        self.lastmax_y = self.stock_data["close"].index[x]
+                        self.lastmax_x = self.stock_data["close"].index[x]
                     else:
                         self.lastmin_y = self.stock_data["close"][x]
-                        self.lastmin_y = self.stock_data["close"].index[x]    
+                        self.lastmin_x = self.stock_data["close"].index[x]    
                 timelst.append(self.stock_data['close'].index[x])
             for i in range(len(self.stock_data['close'])):
                 if i not in self.inflection_lst:
                     self.point.insert(i , nan)  
             self.lineCompletion(self.point)
+            self.maxpoint_x = self.stock_data['close'].index[self.point.index(max(self.point))]
+            self.maxpoint_y = max(self.point)
+            self.minpoint_x = self.stock_data['close'].index[self.point.index(min(self.point))]
+            self.minpoint_y = min(self.point)
             self.dfpoint = pd.DataFrame(self.point, columns= ['point'])
             self.dfpoint.index = self.stock_data['close'].index
             return self.dfpoint

@@ -111,6 +111,8 @@ class stockWindowUiController(QWidget):
         mainAxlst[0].grid(visible=True, which="both", axis="x", ms=1, markevery=1)
         mainAxlst[0].plot(crawler.lastmax_x, crawler.lastmax_y,'ro')
         mainAxlst[0].plot(crawler.lastmin_x, crawler.lastmin_y,'ro')
+        mainAxlst[0].plot(crawler.maxpoint_x, crawler.maxpoint_y,'ro')
+        mainAxlst[0].plot(crawler.minpoint_x, crawler.minpoint_y,'ro')
         self.mainCanvas = FigureCanvas(self.mainFigure)
         self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
 
