@@ -1,15 +1,9 @@
 import requests
 import yfinance as yf
-import json
-from talib import get_functions ,abstract, MA
-import mplfinance as mpf
-import matplotlib.pyplot as plt
+from talib import abstract
 import pandas as pd
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 from numpy import nan
-import urllib3
-from bs4 import BeautifulSoup
-
 
 class StockCrawler():
     def __init__(self, stock_code: str):
@@ -26,19 +20,19 @@ class StockCrawler():
         self.stock_data["limit_up_price"] = res.json()["data"][0]["chart"]["meta"]["limitUpPrice"]
         self.stock_data["limit_down_price"] = res.json()["data"][0]["chart"]["meta"]["limitDownPrice"]
         self.stock_data["today_open"] = res.json()["data"][0]["chart"]["indicators"]["quote"][0]["open"]
+
         self.olddata = yf.Ticker(self.stock_symbol).history(interval = self.interval , period = self.period)
         self.stock_data["open"] = self.olddata["Open"]
         self.stock_data["high"] = self.olddata["High"]
         self.stock_data["low"] = self.olddata["Low"]
         self.stock_data["close"] = self.olddata["Close"]
         self.stock_data["volume"] = self.olddata["Volume"]
-        #self.stock_data["Datetime"] = olddata["Datetime"]
         self.stock_data["updown"] = self.stock_data["close"][-1] - self.stock_data["previous_close"]
         self.stock_data["percentage"] = self.stock_data["updown"] / self.stock_data["previous_close"] * 100
         self.stock_data["amplitude"] = sorted(self.stock_data["close"])[-1] - sorted(self.stock_data["close"])[0]
         self.olddata = {'open':self.stock_data["open"] , 'high' : self.stock_data["high"] ,'low' : self.stock_data["low"], 'close' : self.stock_data["close"],'volume' : self.stock_data["volume"]}
         self.olddata = pd.DataFrame(self.olddata)
-        print(self.olddata)
+
     
     def ta_list(self, function):
         if function == "None":
@@ -134,39 +128,68 @@ class StockCrawler():
         self.interval = interval
         self.period = period
 
-
-
-
 class FuturesCrawler():
-    def __init__(self, futures_code: str, days: int):
+    def __init__(self, futures_code: str, futures_index: int):
         self.futures_code = futures_code
-        self.setStartDate(days)
-        self.get_tw_futures(futures_code)
-
-    def get_tw_futures(self, futures, interval):
-        #interval是1min的話不能選period
-        match interval:
+        self.futures_index = futures_index
+        self.setIntervalPeriod()
+        self.get_tw_futures()
+    
+    def determine_url(self):
+        match self.interval:
             case '1m':
-                url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=1&quote=1"
+                if self.futures_index > 3:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=1&quote=1"
+                else:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=1&quote=1"
             case '1d':
-                url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=D&quote=1&from="+self.ftime+"&to="+self.time
+                if self.futures_index > 3:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=D&quote=1&from="+self.ftime+"&to="+self.time
+                else:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=D&quote=1&from="+self.ftime+"&to="+self.time
             case '1w':
-                url ="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=W&quote=1&from=1660502040&to=1644949980"
-            case '1m':
-                url ="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=M&quote=1&from="+self.ftime+"&to="+self.time
-        #其他三個都可以選period
-        res = requests.get(url)
+                if self.futures_index > 3:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=W&quote=1&from="+self.ftime+"&to="+self.time
+                else:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=W&quote=1&from="+self.ftime+"&to="+self.time
+            case '1mo':
+                if self.futures_index > 3:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=M&quote=1&from="+self.ftime+"&to="+self.time
+                else:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=M&quote=1&from="+self.ftime+"&to="+self.time
+    
+    def get_tw_futures(self):
+        res = requests.get(self.url)
         futuredata = res.json()['data']
         time = pd.to_datetime(futuredata['t'],unit='s')
         futuredata = pd.DataFrame({'open' : futuredata['o'], 'high' : futuredata['h'], 'low' : futuredata['l'], 'close' : futuredata['c'], 'volume' : futuredata['v']},index=time)
         self.df = futuredata
-
-
-    def setStartDate(self,days: int):
-        #UI改成像stockui一樣選interval跟period
+    
+    def setIntervalPeriod(self, interval="1m", period="1d"):
+        self.interval = interval
+        self.period = period
         self.ftime = str(int(datetime.timestamp(datetime.now())))
+        days = 1
         #period設定抓幾天的資料後用timedelta來減
+        match self.period:
+            case "1d":
+                days = 1
+            case "1mo":
+                days = 30
+            case "3mo":
+                days = 90
+            case "6mo":
+                days = 180
+            case "1y":
+                days = 365
+            case "2y":
+                days = 730
+            case "5y":
+                days = 1826
+            case "10y":
+                days = 3650
         self.time = str(int(datetime.timestamp(datetime.now()-timedelta(days))))
+        self.determine_url()
 
     def ta_list(self, function):
         if function == "None":
@@ -250,12 +273,5 @@ class FuturesCrawler():
         else:
             return(i-1)
             
-    def getFutures():
-        id_lst = []
-        with open("future.json", mode='r', encoding="utf-8") as data:
-            data = json.load(data)
-        for i in range(len(data['code'])):
-            id_lst.append(f"{data['code'][i]} : {data['name'][i]}")
-        return id_lst
 
         

@@ -222,7 +222,14 @@
       </layout>
      </item>
      <item>
-      <widget class="QComboBox" name="intervalComboBox"/>
+      <widget class="QComboBox" name="intervalComboBox">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="currentText">
+        <string>1m</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QComboBox" name="periodComboBox">
@@ -230,7 +237,7 @@
         <bool>true</bool>
        </property>
        <property name="currentText">
-        <string>5</string>
+        <string>1d</string>
        </property>
       </widget>
      </item>
