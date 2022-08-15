@@ -60,18 +60,19 @@ class StockCrawler():
             if i in self.plus:
                 if self.inplus(i) not in self.inflection_lst:
                     self.inflection_lst.append(self.inplus(i))
-                    self.lastmax_x = self.inplus(i)
             if i in self.minus:
                 if self.inminus(i) not in self.inflection_lst:
                     self.inflection_lst.append(self.inminus(i))
-                    self.lastmin_x = self.inminus(i)
         if x == "y":
             for x in self.inflection_lst:
                 self.point.append(self.stock_data["close"][x])
-                if x in self.plus:
-                    self.lastmax_y = self.stock_data["close"][x]
-                else:
-                    self.lastmin_y = self.stock_data["close"][x]    
+                if self.stock_data["close"][-1] != self.stock_data["close"][x]:
+                    if x in self.plus:
+                        self.lastmax_y = self.stock_data["close"][x]
+                        self.lastmax_y = self.stock_data["close"].index[x]
+                    else:
+                        self.lastmin_y = self.stock_data["close"][x]
+                        self.lastmin_y = self.stock_data["close"].index[x]    
                 timelst.append(self.stock_data['close'].index[x])
             for i in range(len(self.stock_data['close'])):
                 if i not in self.inflection_lst:
