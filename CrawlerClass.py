@@ -143,68 +143,30 @@ class FuturesCrawler():
         self.setStartDate(days)
         self.get_tw_futures(futures_code)
 
-    def get_tw_futures(self, futures_code):
-        date_list = pd.date_range(self.start_date, self.end_date, freq='D').strftime("%Y/%m/%d").tolist()
+    def get_tw_futures(self, futures, interval):
+        #interval是1min的話不能選period
+        match interval:
+            case '1m':
+                url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=1&quote=1"
+            case '1d':
+                url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=D&quote=1&from="+self.ftime+"&to="+self.time
+            case '1w':
+                url ="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=W&quote=1&from=1660502040&to=1644949980"
+            case '1m':
+                url ="https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+futures+":FUTURES&resolution=M&quote=1&from="+self.ftime+"&to="+self.time
+        #其他三個都可以選period
+        res = requests.get(url)
+        futuredata = res.json()['data']
+        time = pd.to_datetime(futuredata['t'],unit='s')
+        futuredata = pd.DataFrame({'open' : futuredata['o'], 'high' : futuredata['h'], 'low' : futuredata['l'], 'close' : futuredata['c'], 'volume' : futuredata['v']},index=time)
+        self.df = futuredata
 
-        df = pd.DataFrame()
-        http = urllib3.PoolManager()
-        url = "https://www.taifex.com.tw/cht/3/futDailyMarketReport"
-        for day in date_list:  
-            res = http.request(
-                'POST',
-                url,
-                fields={
-                    'queryType': 2,
-                    'marketCode': 0,
-                    'commodity_id': futures_code,
-                    'queryDate': day,
-                    'MarketCode': 0,
-                    'commodity_idt': futures_code
-                }
-            )
-            html_doc = res.data
-            soup = BeautifulSoup(html_doc, 'html.parser')
-            table = soup.findAll('table')[2]
-            try:
-                df_day = pd.read_html(str(table))[2]
-            except:
-                print(day + '並未開盤。')
-                continue
-            
-            #加入日期
-            df_day.insert(0, '日期', day)
-            df = df.append(df_day, ignore_index = True)
-        print(df)
-        df['open'] = df.pop('開盤價')
-        df['high'] = df.pop('最高價')
-        df['low'] = df.pop('最低價')
-        df['close'] = df.pop('最後成交價')
-        df['volume'] = df.pop('*合計成交量')
-        df = {'open' : df['open'] , 'high' : df['high'], 'low' : df['low'] , 'close' : df['close'],'volume' : df['volume'] ,'日期' : df['日期']}
-        df = pd.DataFrame(df)
-        df = df.drop(index = df.loc[df['open'] == '-'].index)
-        df = df.drop(index = df.loc[df['high'] == '-'].index)
-        df = df.drop(index = df.loc[df['low'] == '-'].index)
-        df = df.drop(index = df.loc[df['close'] == '-'].index)
-        df = df.drop(index = df.loc[df['volume'] == '-'].index)  
-        index = list(range(len(df['open'])))
-        df.index = index
-        for i in range(len(df['open'])):           
-            if pd.isnull(df['open'][i]):
-                df = df.drop(index = i)
-        df.index = pd.to_datetime(df['日期'])
-        df.pop('日期')
-        df['open'] = [float(i) for i in df['open']]
-        df['high'] = [float(i) for i in df['high']]
-        df['low'] = [float(i) for i in df['low']]
-        df['close'] = [float(i) for i in df['close']]
-        df['volume'] = [float(i) for i in df['volume']]
-        self.df = df
 
     def setStartDate(self,days: int):
-        self.start_date = datetime.now() - timedelta(days) 
-        self.start_date = str(date(self.start_date.year, self.start_date.month, self.start_date.day))
-        self.end_date = str(date(datetime.now().year, datetime.now().month,datetime.now().day))
+        #UI改成像stockui一樣選interval跟period
+        self.ftime = str(int(datetime.timestamp(datetime.now())))
+        #period設定抓幾天的資料後用timedelta來減
+        self.time = str(int(datetime.timestamp(datetime.now()-timedelta(days))))
 
     def ta_list(self, function):
         if function == "None":
