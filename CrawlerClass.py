@@ -10,6 +10,10 @@ class StockCrawler():
         self.stock_data = {}
         self.olddata = {}
         self.stock_code = stock_code
+        self.lastmax_y = 0
+        self.lastmax_x = 0
+        self.lastmin_y = 0
+        self.lastmin_x = 0
         self.setIntervalPeriod()
         self.get_history_data(stock_code)
         
@@ -66,22 +70,29 @@ class StockCrawler():
         if x == "y":
             for x in self.inflection_lst:
                 self.point.append(self.stock_data["close"][x])
-                if self.stock_data["close"][-1] != self.stock_data["close"][x]:
-                    if x in self.plus:
-                        self.lastmax_y = self.stock_data["close"][x]
-                        self.lastmax_x = self.stock_data["close"].index[x]
-                    else:
-                        self.lastmin_y = self.stock_data["close"][x]
-                        self.lastmin_x = self.stock_data["close"].index[x]    
                 timelst.append(self.stock_data['close'].index[x])
             for i in range(len(self.stock_data['close'])):
                 if i not in self.inflection_lst:
                     self.point.insert(i , nan)  
             self.lineCompletion(self.point)
-            self.maxpoint_x = self.stock_data['close'].index[self.point.index(max(self.point))]
+            try:
+                if self.stock_data["close"][self.inflection_lst[-2]]>self.stock_data["close"][self.inflection_lst[-3]]:
+                    self.lastmax_x = self.inflection_lst[-2]
+                    self.lastmin_x = self.inflection_lst[-3]
+                    self.lastmax_y = self.stock_data["close"][self.lastmax_x]
+                    self.lastmin_y = self.stock_data["close"][self.lastmin_x]
+                else:
+                    self.lastmin_x = self.inflection_lst[-2]
+                    self.lastmax_x = self.inflection_lst[-3]
+                    self.lastmin_y = self.stock_data["close"][self.lastmin_x]
+                    self.lastmax_y = self.stock_data["close"][self.lastmax_x]    
+            except IndexError:
+                pass   
+            self.maxpoint_x = self.point.index(max(self.point))
             self.maxpoint_y = max(self.point)
-            self.minpoint_x = self.stock_data['close'].index[self.point.index(min(self.point))]
+            self.minpoint_x = self.point.index(min(self.point))
             self.minpoint_y = min(self.point)
+            
             self.dfpoint = pd.DataFrame(self.point, columns= ['point'])
             self.dfpoint.index = self.stock_data['close'].index
             return self.dfpoint
@@ -144,6 +155,10 @@ class FuturesCrawler():
     def __init__(self, futures_code: str, futures_index: int):
         self.futures_code = futures_code
         self.futures_index = futures_index
+        self.lastmax_y = 0
+        self.lastmax_x = 0
+        self.lastmin_y = 0
+        self.lastmin_x = 0
         self.setIntervalPeriod()
         self.get_tw_futures()
     
@@ -257,6 +272,24 @@ class FuturesCrawler():
                 if i not in self.inflection_lst:
                     self.point.insert(i , nan)  
             self.lineCompletion(self.point)
+            try:
+                if self.df["close"][self.inflection_lst[-2]]>self.df["close"][self.inflection_lst[-3]]:
+                    self.lastmax_x = self.inflection_lst[-2]
+                    self.lastmin_x = self.inflection_lst[-3]
+                    self.lastmax_y = self.df["close"][self.lastmax_x]
+                    self.lastmin_y = self.df["close"][self.lastmin_x]
+                else:
+                    self.lastmin_x = self.inflection_lst[-2]
+                    self.lastmax_x = self.inflection_lst[-3]
+                    self.lastmin_y = self.df["close"][self.lastmin_x]
+                    self.lastmax_y = self.df["close"][self.lastmax_x]    
+            except IndexError:
+                pass   
+            self.maxpoint_x = self.point.index(max(self.point))
+            self.maxpoint_y = max(self.point)
+            self.minpoint_x = self.point.index(min(self.point))
+            self.minpoint_y = min(self.point)
+            
             df = pd.DataFrame(self.point, columns= ['point'])
             df.index = self.df['close'].index
             return df

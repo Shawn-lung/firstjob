@@ -27,6 +27,8 @@ class futuresWindowUiController(QWidget):
         self.ui.plotLayout.addWidget(self.indicatorCanvas)
         self.ui.plotLayout.addWidget(self.indicatorToolbar)
 
+        self.notifyFlag = True
+
         self.ui.indicatorComboBox1.addItems(['None', 'ADD', 'DIV', 'MAX', 'MAXINDEX', 'MIN', 'MININDEX', 'MINMAX', 'MINMAXINDEX', 'MULT', 'SUB', 'SUM', 'ACOS', 'ASIN', 'ATAN', 'CEIL', 'COS', 'COSH', 'EXP', 'FLOOR', 'LN', 'LOG10', 'SIN', 'SINH', 'SQRT', 'TAN', 'TANH', 'ADX', 'ADXR', 'APO', 'AROON', 'AROONOSC', 'BOP', 'CCI', 'CMO', 'DX', 'MACD', 'MACDEXT', 'MACDFIX', 'MFI', 'MINUS_DI', 'MINUS_DM', 'MOM', 'PLUS_DI', 'PLUS_DM', 'PPO', 'ROC', 'ROCP', 'ROCR', 'ROCR100', 'RSI', 'STOCH', 'STOCHF', 'STOCHRSI', 'TRIX', 'ULTOSC', 'WILLR', 'BBANDS', 'DEMA', 'EMA', 'HT_TRENDLINE', 'KAMA', 'MA', 'MAMA', 'MIDPOINT', 'MIDPRICE', 'SAR', 'SAREXT', 'SMA', 'T3', 'TEMA', 'TRIMA', 'WMA', 'CDL2CROWS', 'CDL3BLACKCROWS', 'CDL3INSIDE', 'CDL3LINESTRIKE', 'CDL3OUTSIDE', 'CDL3STARSINSOUTH', 'CDL3WHITESOLDIERS', 'CDLABANDONEDBABY', 'CDLADVANCEBLOCK', 'CDLBELTHOLD', 'CDLBREAKAWAY', 'CDLCLOSINGMARUBOZU', 'CDLCONCEALBABYSWALL', 'CDLCOUNTERATTACK', 'CDLDARKCLOUDCOVER', 'CDLDOJI', 'CDLDOJISTAR', 'CDLDRAGONFLYDOJI', 'CDLENGULFING', 'CDLEVENINGDOJISTAR', 'CDLEVENINGSTAR', 'CDLGAPSIDESIDEWHITE', 'CDLGRAVESTONEDOJI', 'CDLHAMMER', 'CDLHANGINGMAN', 'CDLHARAMI', 'CDLHARAMICROSS', 'CDLHIGHWAVE', 'CDLHIKKAKE', 'CDLHIKKAKEMOD', 'CDLHOMINGPIGEON', 'CDLIDENTICAL3CROWS', 'CDLINNECK', 'CDLINVERTEDHAMMER', 'CDLKICKING', 'CDLKICKINGBYLENGTH', 'CDLLADDERBOTTOM', 'CDLLONGLEGGEDDOJI', 'CDLLONGLINE', 'CDLMARUBOZU', 'CDLMATCHINGLOW', 'CDLMATHOLD', 'CDLMORNINGDOJISTAR', 'CDLMORNINGSTAR', 'CDLONNECK', 'CDLPIERCING', 'CDLRICKSHAWMAN', 'CDLRISEFALL3METHODS', 'CDLSEPARATINGLINES', 'CDLSHOOTINGSTAR', 'CDLSHORTLINE', 'CDLSPINNINGTOP', 'CDLSTALLEDPATTERN', 'CDLSTICKSANDWICH', 'CDLTAKURI', 'CDLTASUKIGAP', 'CDLTHRUSTING', 'CDLTRISTAR', 'CDLUNIQUE3RIVER', 'CDLUPSIDEGAP2CROWS', 'CDLXSIDEGAP3METHODS', 'AVGPRICE', 'MEDPRICE', 'TYPPRICE', 'WCLPRICE', 'BETA', 'CORREL', 'LINEARREG', 'LINEARREG_ANGLE', 'LINEARREG_INTERCEPT', 'LINEARREG_SLOPE', 'STDDEV', 'TSF', 'VAR', 'ATR', 'NATR', 'TRANGE', 'AD', 'ADOSC', 'OBV'])
         self.ui.indicatorComboBox2.addItems(['None', 'ADD', 'DIV', 'MAX', 'MAXINDEX', 'MIN', 'MININDEX', 'MINMAX', 'MINMAXINDEX', 'MULT', 'SUB', 'SUM', 'ACOS', 'ASIN', 'ATAN', 'CEIL', 'COS', 'COSH', 'EXP', 'FLOOR', 'LN', 'LOG10', 'SIN', 'SINH', 'SQRT', 'TAN', 'TANH', 'ADX', 'ADXR', 'APO', 'AROON', 'AROONOSC', 'BOP', 'CCI', 'CMO', 'DX', 'MACD', 'MACDEXT', 'MACDFIX', 'MFI', 'MINUS_DI', 'MINUS_DM', 'MOM', 'PLUS_DI', 'PLUS_DM', 'PPO', 'ROC', 'ROCP', 'ROCR', 'ROCR100', 'RSI', 'STOCH', 'STOCHF', 'STOCHRSI', 'TRIX', 'ULTOSC', 'WILLR', 'BBANDS', 'DEMA', 'EMA', 'HT_TRENDLINE', 'KAMA', 'MA', 'MAMA', 'MIDPOINT', 'MIDPRICE', 'SAR', 'SAREXT', 'SMA', 'T3', 'TEMA', 'TRIMA', 'WMA', 'CDL2CROWS', 'CDL3BLACKCROWS', 'CDL3INSIDE', 'CDL3LINESTRIKE', 'CDL3OUTSIDE', 'CDL3STARSINSOUTH', 'CDL3WHITESOLDIERS', 'CDLABANDONEDBABY', 'CDLADVANCEBLOCK', 'CDLBELTHOLD', 'CDLBREAKAWAY', 'CDLCLOSINGMARUBOZU', 'CDLCONCEALBABYSWALL', 'CDLCOUNTERATTACK', 'CDLDARKCLOUDCOVER', 'CDLDOJI', 'CDLDOJISTAR', 'CDLDRAGONFLYDOJI', 'CDLENGULFING', 'CDLEVENINGDOJISTAR', 'CDLEVENINGSTAR', 'CDLGAPSIDESIDEWHITE', 'CDLGRAVESTONEDOJI', 'CDLHAMMER', 'CDLHANGINGMAN', 'CDLHARAMI', 'CDLHARAMICROSS', 'CDLHIGHWAVE', 'CDLHIKKAKE', 'CDLHIKKAKEMOD', 'CDLHOMINGPIGEON', 'CDLIDENTICAL3CROWS', 'CDLINNECK', 'CDLINVERTEDHAMMER', 'CDLKICKING', 'CDLKICKINGBYLENGTH', 'CDLLADDERBOTTOM', 'CDLLONGLEGGEDDOJI', 'CDLLONGLINE', 'CDLMARUBOZU', 'CDLMATCHINGLOW', 'CDLMATHOLD', 'CDLMORNINGDOJISTAR', 'CDLMORNINGSTAR', 'CDLONNECK', 'CDLPIERCING', 'CDLRICKSHAWMAN', 'CDLRISEFALL3METHODS', 'CDLSEPARATINGLINES', 'CDLSHOOTINGSTAR', 'CDLSHORTLINE', 'CDLSPINNINGTOP', 'CDLSTALLEDPATTERN', 'CDLSTICKSANDWICH', 'CDLTAKURI', 'CDLTASUKIGAP', 'CDLTHRUSTING', 'CDLTRISTAR', 'CDLUNIQUE3RIVER', 'CDLUPSIDEGAP2CROWS', 'CDLXSIDEGAP3METHODS', 'AVGPRICE', 'MEDPRICE', 'TYPPRICE', 'WCLPRICE', 'BETA', 'CORREL', 'LINEARREG', 'LINEARREG_ANGLE', 'LINEARREG_INTERCEPT', 'LINEARREG_SLOPE', 'STDDEV', 'TSF', 'VAR', 'ATR', 'NATR', 'TRANGE', 'AD', 'ADOSC', 'OBV'])
         self.ui.indicatorComboBox3.addItems(['None', 'ADD', 'DIV', 'MAX', 'MAXINDEX', 'MIN', 'MININDEX', 'MINMAX', 'MINMAXINDEX', 'MULT', 'SUB', 'SUM', 'ACOS', 'ASIN', 'ATAN', 'CEIL', 'COS', 'COSH', 'EXP', 'FLOOR', 'LN', 'LOG10', 'SIN', 'SINH', 'SQRT', 'TAN', 'TANH', 'ADX', 'ADXR', 'APO', 'AROON', 'AROONOSC', 'BOP', 'CCI', 'CMO', 'DX', 'MACD', 'MACDEXT', 'MACDFIX', 'MFI', 'MINUS_DI', 'MINUS_DM', 'MOM', 'PLUS_DI', 'PLUS_DM', 'PPO', 'ROC', 'ROCP', 'ROCR', 'ROCR100', 'RSI', 'STOCH', 'STOCHF', 'STOCHRSI', 'TRIX', 'ULTOSC', 'WILLR', 'BBANDS', 'DEMA', 'EMA', 'HT_TRENDLINE', 'KAMA', 'MA', 'MAMA', 'MIDPOINT', 'MIDPRICE', 'SAR', 'SAREXT', 'SMA', 'T3', 'TEMA', 'TRIMA', 'WMA', 'CDL2CROWS', 'CDL3BLACKCROWS', 'CDL3INSIDE', 'CDL3LINESTRIKE', 'CDL3OUTSIDE', 'CDL3STARSINSOUTH', 'CDL3WHITESOLDIERS', 'CDLABANDONEDBABY', 'CDLADVANCEBLOCK', 'CDLBELTHOLD', 'CDLBREAKAWAY', 'CDLCLOSINGMARUBOZU', 'CDLCONCEALBABYSWALL', 'CDLCOUNTERATTACK', 'CDLDARKCLOUDCOVER', 'CDLDOJI', 'CDLDOJISTAR', 'CDLDRAGONFLYDOJI', 'CDLENGULFING', 'CDLEVENINGDOJISTAR', 'CDLEVENINGSTAR', 'CDLGAPSIDESIDEWHITE', 'CDLGRAVESTONEDOJI', 'CDLHAMMER', 'CDLHANGINGMAN', 'CDLHARAMI', 'CDLHARAMICROSS', 'CDLHIGHWAVE', 'CDLHIKKAKE', 'CDLHIKKAKEMOD', 'CDLHOMINGPIGEON', 'CDLIDENTICAL3CROWS', 'CDLINNECK', 'CDLINVERTEDHAMMER', 'CDLKICKING', 'CDLKICKINGBYLENGTH', 'CDLLADDERBOTTOM', 'CDLLONGLEGGEDDOJI', 'CDLLONGLINE', 'CDLMARUBOZU', 'CDLMATCHINGLOW', 'CDLMATHOLD', 'CDLMORNINGDOJISTAR', 'CDLMORNINGSTAR', 'CDLONNECK', 'CDLPIERCING', 'CDLRICKSHAWMAN', 'CDLRISEFALL3METHODS', 'CDLSEPARATINGLINES', 'CDLSHOOTINGSTAR', 'CDLSHORTLINE', 'CDLSPINNINGTOP', 'CDLSTALLEDPATTERN', 'CDLSTICKSANDWICH', 'CDLTAKURI', 'CDLTASUKIGAP', 'CDLTHRUSTING', 'CDLTRISTAR', 'CDLUNIQUE3RIVER', 'CDLUPSIDEGAP2CROWS', 'CDLXSIDEGAP3METHODS', 'AVGPRICE', 'MEDPRICE', 'TYPPRICE', 'WCLPRICE', 'BETA', 'CORREL', 'LINEARREG', 'LINEARREG_ANGLE', 'LINEARREG_INTERCEPT', 'LINEARREG_SLOPE', 'STDDEV', 'TSF', 'VAR', 'ATR', 'NATR', 'TRANGE', 'AD', 'ADOSC', 'OBV'])
@@ -36,18 +38,42 @@ class futuresWindowUiController(QWidget):
         self.ui.indicatorComboBox1.currentIndexChanged.connect(self.updateData)
         self.ui.indicatorComboBox2.currentIndexChanged.connect(self.updateData)
         self.ui.indicatorComboBox3.currentIndexChanged.connect(self.updateData)
+
+        self.ui.confirmButton.clicked.connect(self.onConfirmButtonClicked)
+
+        self.notify_timer = QTimer(self)
+        self.notify_timer.timeout.connect(self.notify)
+        self.blinkFlag = True
+        self.lastmax = 0
+        self.lastmin = 0
         
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.updateData)
-        
+        self.button_switch_on = True
         self.futures_code = futures_code
         self.futures_index = futures_index
         self.updateData()
         self.ui.resetButton.clicked.connect(self.updateData)
                       
     def oneMinute(self):
-        self.timer.start(60000)
+        self.timer.start(20000)
 
+    def onConfirmButtonClicked(self):
+        if self.ui.confirmButton.text() == "通知:開":
+            self.ui.notifyingLabel.setStyleSheet("background-color:transparent")
+            self.notifyFlag = False
+            self.ui.confirmButton.setText("通知:關")
+            self.notify_timer.stop()
+        else:
+            self.ui.confirmButton.setText("通知:開")
+            self.button_switch_on = True
+
+    def notify(self):
+        if self.ui.confirmButton.text() == "通知:開":
+            self.ui.notifyingLabel.setStyleSheet("background-color:red" if self.blinkFlag else "background-color:transparent")
+            self.blinkFlag = not self.blinkFlag
+            self.notify_timer.start(500)
+    
     def intervalComboBoxChangeEvent(self):
         self.ui.periodComboBox.clear()
         match self.ui.intervalComboBox.currentText():
@@ -94,6 +120,14 @@ class futuresWindowUiController(QWidget):
         self.mainFigure, mainAxlst = mpf.plot(crawler.df, type="candle", style=style, volume = True, ylabel="price($)", returnfig=True, addplot=ap)
         mainAxlst[0].set_title(self.futures_code)
         mainAxlst[0].grid(visible=True, which="both", axis="x", ms=1, markevery=1)
+        mainAxlst[0].plot(crawler.lastmax_x, crawler.lastmax_y, 'ro' )
+        mainAxlst[0].plot(crawler.lastmin_x, crawler.lastmin_y, 'go' )
+        mainAxlst[0].plot(crawler.maxpoint_x, crawler.maxpoint_y, 'ro')
+        mainAxlst[0].plot(crawler.minpoint_x, crawler.minpoint_y, 'go')
+        mainAxlst[0].annotate(f"{round(crawler.lastmax_y, 2)}", xy = (crawler.lastmax_x, crawler.lastmax_y))
+        mainAxlst[0].annotate(f"{round(crawler.lastmin_y, 2)}", xy = (crawler.lastmin_x, crawler.lastmin_y),xytext=(crawler.lastmin_x, crawler.lastmin_y-0.05))
+        mainAxlst[0].annotate(f"{round(crawler.maxpoint_y, 2)}", xy = (crawler.maxpoint_x,crawler.maxpoint_y))
+        mainAxlst[0].annotate(f"{round(crawler.minpoint_y, 2)}", xy = (crawler.minpoint_x, crawler.minpoint_y), xytext=(crawler.minpoint_x, crawler.minpoint_y-0.05))
 
         self.mainCanvas = FigureCanvas(self.mainFigure)
         self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
@@ -108,3 +142,28 @@ class futuresWindowUiController(QWidget):
         self.subAx.plot(crawler.ta_list(self.ui.indicatorComboBox3.currentText()))
         self.indicatorCanvas.draw()
         self.oneMinute()
+
+        if self.button_switch_on:
+            self.lastmax = crawler.lastmax_y
+            self.lastmin = crawler.lastmin_y
+            self.button_switch_on = False
+        
+        if self.lastmax != crawler.lastmax_y :
+            self.notifyFlag = True
+        elif self.lastmin != crawler.lastmin_y:
+            self.notifyFlag = True
+        
+        if crawler.df['close'][-1] >= crawler.lastmax_y and self.notifyFlag == True:            
+            print('inlastmax')
+            self.lastmax = crawler.lastmax_y
+            self.lastmin = crawler.lastmin_y
+            self.notifyFlag = False
+            self.notify()
+        elif crawler.df['close'][-1] <= crawler.lastmin_y and self.notifyFlag == True:            
+            print(self.lastmin)
+            print(crawler.lastmin_y)
+            self.lastmax = crawler.lastmax_y
+            self.lastmin = crawler.lastmin_y   
+            self.notify()
+            self.notifyFlag = False
+        
