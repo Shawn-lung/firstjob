@@ -96,7 +96,6 @@ class futuresWindowUiController(QWidget):
         self.updateData()
 
     def updateData(self):
-        print('data updated')
         crawler = FuturesCrawler(self.futures_code, self.futures_index)
         crawler.setIntervalPeriod(interval=self.ui.intervalComboBox.currentText(), period=self.ui.periodComboBox.currentText())
         crawler.get_tw_futures()
@@ -162,14 +161,11 @@ class futuresWindowUiController(QWidget):
             self.notifyFlag = True
         
         if crawler.df['close'][-1] >= crawler.lastmax_y and self.notifyFlag == True:            
-            print('inlastmax')
             self.lastmax = crawler.lastmax_y
             self.lastmin = crawler.lastmin_y
             self.notifyFlag = False
             self.notify()
         elif crawler.df['close'][-1] <= crawler.lastmin_y and self.notifyFlag == True:            
-            print(self.lastmin)
-            print(crawler.lastmin_y)
             self.lastmax = crawler.lastmax_y
             self.lastmin = crawler.lastmin_y   
             self.notify()

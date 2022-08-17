@@ -1,5 +1,3 @@
-from socketserver import DatagramRequestHandler
-import time
 from PyQt6.QtWidgets import QWidget, QMessageBox
 from MainUi import Ui_Form
 from CrawlerClass import StockCrawler, FuturesCrawler
@@ -55,15 +53,12 @@ class MainUiController(QWidget):
     
     def on_open_favorite_button_clicked(self):
         for i in [self.ui.favoriteComboBox.itemText(x) for x in range(self.ui.favoriteComboBox.count())]:
-            print(i)
             if i[0].isdigit():
                 self.showStockWindow(i[:i.find(':')])
             elif i.startswith("TSE"):
-                print(i[:i.find(':')])
                 self.showFuturesWindow(i[:i.find(':')], 4)
             else:
                 self.showFuturesWindow(i[:i.find(':')], 0)
-            #time.sleep(1)
 
     def writeToComboBox(self):
         self.ui.favoriteComboBox.clear()

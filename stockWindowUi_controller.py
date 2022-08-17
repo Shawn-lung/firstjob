@@ -104,7 +104,6 @@ class stockWindowUiController(QWidget):
         self.updateData()
 
     def updateData(self):
-        print('data updated')
         crawler = StockCrawler(self.stock_code)
         crawler.setIntervalPeriod(interval=self.ui.intervalComboBox.currentText(), period=self.ui.periodComboBox.currentText())
         crawler.get_history_data(self.stock_code)
@@ -168,10 +167,8 @@ class stockWindowUiController(QWidget):
         self.oneMinute()
 
         if self.lastmax != crawler.lastmax_x:
-            print('inlastmax')
             self.notifyFlag = True
         elif self.lastmin != crawler.lastmin_x:
-            print('inlastmin')
             self.notifyFlag = True
         
         if crawler.stock_data['close'][-1] >= crawler.lastmax_y and self.notifyFlag == True:            
