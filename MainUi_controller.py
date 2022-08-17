@@ -19,6 +19,8 @@ class MainUiController(QWidget):
         self.ui.removeButton.clicked.connect(self.on_remove_button_clicked)
         self.ui.openFavoriteButton.clicked.connect(self.on_open_favorite_button_clicked)
         self.ui.showFuturesWindowPushButton.clicked.connect(self.on_futures_button_clicked)
+        self.stockn = 0
+        self.futuresn = 0
         self.writeToComboBox()
         self.openedLst = []
 
@@ -84,14 +86,66 @@ class MainUiController(QWidget):
 
     def showStockWindow(self, stock_code):
         self.openedLst.append(QWidget())
-        self.stockWindowUi = stockWindowUiController(self.openedLst[-1], stock_code)
+        match self.stockn:
+            case 0:               
+                self.stockWindowUi = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 1:
+                self.stockWindowUi1 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 2:
+                self.stockWindowUi2 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 3:
+                self.stockWindowUi3 = stockWindowUiController(self.openedLst[-1], stock_code) 
+            case 4:               
+                self.stockWindowUi4 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 5:
+                self.stockWindowUi5 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 6:
+                self.stockWindowUi6 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 7:
+                self.stockWindowUi7 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 8:               
+                self.stockWindowUi8 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 9:
+                self.stockWindowUi9 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 10:
+                self.stockWindowUi10 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 11:
+                self.stockWindowUi11 = stockWindowUiController(self.openedLst[-1], stock_code) 
+            case 12:               
+                self.stockWindowUi12 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 13:
+                self.stockWindowUi13 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 14:
+                self.stockWindowUi14 = stockWindowUiController(self.openedLst[-1], stock_code)
+            case 15:
+                self.stockWindowUi15 = stockWindowUiController(self.openedLst[-1], stock_code)                   
+
+        self.stockn +=1
         self.openedLst[-1].show()
-        time.sleep(0.5)
+
 
     def showFuturesWindow(self, futures_code, futures_index):
         self.openedLst.append(QWidget())
-        self.futuresWindowUi = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)
+        match self.futuresn:
+            case 0:
+                self.futuresWindowUi = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)
+            case 1:
+                self.futuresWindowUi1 = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index) 
+            case 2:
+                self.futuresWindowUi2 = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)
+            case 3:
+                self.futuresWindowUi3 = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)
+            case 4:
+                self.futuresWindowUi4 = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)
+            case 5:
+                self.futuresWindowUi5 = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index) 
+            case 6:
+                self.futuresWindowUi6 = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)
+            case 7:
+                self.futuresWindowUi7 = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)           
+
+        self.futuresn +=1
         self.openedLst[-1].show()
-        time.sleep(0.5)
+
 
     
