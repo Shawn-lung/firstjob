@@ -107,6 +107,11 @@
        </item>
        <item>
         <widget class="QPushButton" name="removeButton">
+         <property name="font">
+          <font>
+           <pointsize>12</pointsize>
+          </font>
+         </property>
          <property name="text">
           <string>從常用中移除</string>
          </property>

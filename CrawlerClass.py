@@ -197,6 +197,7 @@ class FuturesCrawler():
         else:
             futuredata = pd.DataFrame({'open' : list(reversed(futuredata['o'])), 'high' : list(reversed(futuredata['h'])), 'low' : list(reversed(futuredata['l'])), 'close' : list(reversed(futuredata['c'])), 'volume' : list(reversed(futuredata['v']))},index=list(reversed(time)))
         self.df = futuredata
+        self.amplitude = max(futuredata["close"]) - min(futuredata["close"])
 
     def setIntervalPeriod(self, interval="1m", period="1d"):
         self.interval = interval

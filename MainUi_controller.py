@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QWidget, QMessageBox
 from MainUi import Ui_Form
-from CrawlerClass import StockCrawler, FuturesCrawler
+from CrawlerClass import StockCrawler
 from stockWindowUi_controller import stockWindowUiController
 from futuresWindowUi_controller import futuresWindowUiController
+from MyWidget import MyWidget
 import json
-
 
 class MainUiController(QWidget):
     def __init__(self):
@@ -82,9 +82,9 @@ class MainUiController(QWidget):
             
 
     def showStockWindow(self, stock_code):
-        self.openedLst.append(QWidget())
+        self.openedLst.append(MyWidget())
         match self.stockn:
-            case 0:               
+            case 0:
                 self.stockWindowUi = stockWindowUiController(self.openedLst[-1], stock_code)
             case 1:
                 self.stockWindowUi1 = stockWindowUiController(self.openedLst[-1], stock_code)
@@ -117,12 +117,12 @@ class MainUiController(QWidget):
             case 15:
                 self.stockWindowUi15 = stockWindowUiController(self.openedLst[-1], stock_code)                   
 
-        self.stockn +=1
+        self.stockn = self.stockn+1 if self.stockn <= 15 else 0
         self.openedLst[-1].show()
 
 
     def showFuturesWindow(self, futures_code, futures_index):
-        self.openedLst.append(QWidget())
+        self.openedLst.append(MyWidget())
         match self.futuresn:
             case 0:
                 self.futuresWindowUi = futuresWindowUiController(self.openedLst[-1], futures_code, futures_index)
@@ -144,4 +144,3 @@ class MainUiController(QWidget):
         self.futuresn +=1
         self.openedLst[-1].show()
                                                                                                                                                                                                                                                                                         
-    
