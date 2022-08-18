@@ -4,6 +4,8 @@ from CrawlerClass import StockCrawler, FuturesCrawler
 from stockWindowUi_controller import stockWindowUiController
 from futuresWindowUi_controller import futuresWindowUiController
 import json
+
+
 class MainUiController(QWidget):
     def __init__(self):
         super().__init__()
@@ -141,6 +143,5 @@ class MainUiController(QWidget):
 
         self.futuresn +=1
         self.openedLst[-1].show()
-
-
+                                                                                                                                                                                                                                                                                        
     

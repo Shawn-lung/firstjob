@@ -176,5 +176,5 @@ class futuresWindowUiController(QWidget):
             fav_dict["indicators"][0] = self.ui.indicatorComboBox1.currentText()
             fav_dict["indicators"][1] = self.ui.indicatorComboBox2.currentText()
             fav_dict["indicators"][2] = self.ui.indicatorComboBox3.currentText()
-            with open("favorite.json", "w", encoding="utf-8") as data:
-                json.dump(fav_dict, data, ensure_ascii=False)        
+        with open("favorite.json", "w", encoding="utf-8") as data:
+            json.dump(fav_dict, data, ensure_ascii=False)        

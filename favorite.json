@@ -1,1 +1,1 @@
-{"stock": ["8069: 元太", "0050: 元大台灣50"], "futures": [], "indicators": ["None", "None", "None"]}
+{"stock": [], "futures": ["MXF: 小台指期", "EXF: 電子期", "TXF: 台指期"], "indicators": ["DIV", "DIV", "MIN"]}
