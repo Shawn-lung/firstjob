@@ -48,7 +48,10 @@ class MainUiController(QWidget):
             try:
                 fav_dict["stock"].remove(self.ui.favoriteComboBox.currentText())
             except:
-                fav_dict["futures"].remove(self.ui.favoriteComboBox.currentText())
+                try:
+                    fav_dict["futures"].remove(self.ui.favoriteComboBox.currentText())
+                except:
+                    pass
             with open("favorite.json", "w", encoding="utf-8") as data:
                 json.dump(fav_dict, data, ensure_ascii=False)
         self.writeToComboBox()
