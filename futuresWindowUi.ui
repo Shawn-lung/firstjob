@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
-    <height>352</height>
+    <width>1002</width>
+    <height>359</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -251,7 +251,7 @@
         <bool>true</bool>
        </property>
        <property name="currentText">
-        <string>1d</string>
+        <string>1h</string>
        </property>
       </widget>
      </item>
@@ -298,7 +298,68 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="plotLayout"/>
+    <layout class="QVBoxLayout" name="plotLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>開</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="oLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>高</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="hLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>低</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>收</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="cLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

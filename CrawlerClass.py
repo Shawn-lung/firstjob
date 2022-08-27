@@ -167,24 +167,52 @@ class FuturesCrawler():
             case '1m':
                 if self.futures_index > 3:
                     self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=1&quote=1"
+                    self.combine = 1
                 else:
-                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=1&quote=1"
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=1&quote=1"            
+                    self.combine = 1
+            case '5m':
+                if self.futures_index > 3:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=1&quote=1"
+                    self.combine = 5
+                else:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=1&quote=1"            
+                    self.combine = 5
+            case '15m':
+                if self.futures_index > 3:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=1&quote=1"
+                    self.combine = 15
+                else:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=1&quote=1"            
+                    self.combine = 15
+            case '30m':
+                if self.futures_index > 3:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=1&quote=1"
+                    self.combine = 30
+                else:
+                    self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=1&quote=1"                    
+                    self.combine = 30
             case '1d':
                 if self.futures_index > 3:
                     self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=D&quote=1&from="+self.ftime+"&to="+self.time
+                    self.combine = 1
                 else:
                     self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=D&quote=1&from="+self.ftime+"&to="+self.time
+                    self.combine = 1
             case '1w':
                 if self.futures_index > 3:
                     self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=W&quote=1&from="+self.ftime+"&to="+self.time
+                    self.combine = 1
                 else:
                     self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=W&quote=1&from="+self.ftime+"&to="+self.time
+                    self.combine = 1
             case '1mo':
                 if self.futures_index > 3:
                     self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWS:"+self.futures_code+":INDEX&resolution=M&quote=1&from="+self.ftime+"&to="+self.time
+                    self.combine = 1
                 else:
                     self.url = "https://ws.api.cnyes.com/ws/api/v1/charting/history?symbol=TWF:"+self.futures_code+":FUTURES&resolution=M&quote=1&from="+self.ftime+"&to="+self.time
-    
+                    self.combine = 1    
     def get_tw_futures(self):
         res = requests.get(self.url)
         futuredata = res.json()['data']
@@ -196,6 +224,12 @@ class FuturesCrawler():
                 futuredata = pd.DataFrame({'open' : list(reversed(futuredata['o'])), 'high' : list(reversed(futuredata['h'])), 'low' : list(reversed(futuredata['l'])), 'close' : list(reversed(futuredata['c'])), 'volume' : list(reversed(futuredata['v']))},index=list(reversed(time)))
         else:
             futuredata = pd.DataFrame({'open' : list(reversed(futuredata['o'])), 'high' : list(reversed(futuredata['h'])), 'low' : list(reversed(futuredata['l'])), 'close' : list(reversed(futuredata['c'])), 'volume' : list(reversed(futuredata['v']))},index=list(reversed(time)))
+        x = 0
+        for i in range(len(futuredata['open'])):    
+            if i % self.combine != 0:
+                futuredata = futuredata.drop(index = futuredata.index[x])
+                x-=1
+            x+=1
         self.df = futuredata
         self.amplitude = max(futuredata["close"]) - min(futuredata["close"])
 
@@ -207,17 +241,56 @@ class FuturesCrawler():
         self.flag = False
         self.flag1 = 60
         #period設定抓幾天的資料後用timedelta來減
+        match self.interval:
+            case '1m':
+                match self.period:
+                    case "1h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 60
+                    case "2h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 120
+                    case "1d":
+                        days = 1
+            case '5m':
+                match self.period:
+                    case "1h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 60
+                    case "2h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 120
+                    case "1d":
+                        days = 1
+            case '15m':
+                match self.period:
+                    case "1h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 60
+                    case "2h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 120
+                    case "1d":
+                        days = 1     
+            case '30m':
+                match self.period:
+                    case "1h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 60
+                    case "2h":
+                        days = 1
+                        self.flag = True
+                        self.flag1 = 120
+                    case "1d":
+                        days = 1      
         match self.period:
-            case "1h":
-                days = 1
-                self.flag = True
-                self.flag1 = 60
-            case "2h":
-                days = 1
-                self.flag = True
-                self.flag1 = 120
-            case "1d":
-                days = 1
             case "1mo":
                 days = 30
             case "3mo":
@@ -231,7 +304,7 @@ class FuturesCrawler():
             case "5y":
                 days = 1826
             case "10y":
-                days = 3650
+                days = 3650    
         self.time = str(int(datetime.timestamp(datetime.now()-timedelta(days))))
         self.determine_url()
 

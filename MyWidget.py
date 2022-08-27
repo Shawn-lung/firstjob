@@ -1,8 +1,14 @@
 from PyQt6.QtWidgets import QWidget
+from PyQt6.QtCore import Qt
 from PyQt6 import QtGui
 import json
 
 class MyWidget(QWidget):
+    def keyPressEvent(self, a0: QtGui.QKeyEvent) -> None:
+        if a0.key() == Qt.Key.Key_Left.value:
+            print("left pressed")
+        if a0.key() == Qt.Key.Key_Right.value:
+            print("right pressed")
     
     def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
         super().closeEvent(a0)
