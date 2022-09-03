@@ -302,6 +302,20 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>時間</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="tLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>開</string>
