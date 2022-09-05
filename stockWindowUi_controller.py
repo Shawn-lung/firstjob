@@ -111,7 +111,6 @@ class stockWindowUiController(MyWidget):
     def updateData(self):
         crawler = StockCrawler(self.stock_code)
         crawler.setIntervalPeriod(interval=self.prt.ui.intervalComboBox.currentText(), period=self.prt.ui.periodComboBox.currentText())
-        crawler.get_history_data(self.stock_code)
 
         try :
             self.prt.ui.privious_close_label.setText(str(crawler.stock_data['previous_close']))
@@ -194,3 +193,14 @@ class stockWindowUiController(MyWidget):
             self.notify()
             self.notifyFlag = False
         
+    def crawlData(self):
+        self.prt.crawler  = StockCrawler(self.stock_code)
+        self.prt.crawler.setIntervalPeriod(interval=self.prt.crawler.ui.intervalComboBox.currentText(), period=self.prt.crawler.ui.periodComboBox().currenText())
+        self.prt.crawler.get_history_data(self.stock_code)
+        self.prt.candleBarIndex = -1
+        self.prt.candleBars = [self.prt.crawler.df.index[-1], self.prt.crawler.df['open'][-1], self.prt.crawler.df['high'][-1], self.prt.crawler.df['low'][-1], self.prt.crawler.df['close'][-1]]
+        self.prt.ui.tLabel.setText(str(self.prt.candleBars[0]))
+        self.prt.ui.oLabel.setText(str(self.prt.candleBars[1]))
+        self.prt.ui.hLabel.setText(str(self.prt.candleBars[2]))
+        self.prt.ui.lLabel.setText(str(self.prt.candleBars[3]))
+        self.prt.ui.cLabel.setText(str(self.prt.candleBars[4]))
