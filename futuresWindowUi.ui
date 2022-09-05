@@ -238,27 +238,27 @@
      <item>
       <widget class="QComboBox" name="intervalComboBox">
        <property name="editable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="currentText">
-        <string>1m</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QComboBox" name="periodComboBox">
        <property name="editable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="currentText">
-        <string>1h</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QComboBox" name="indicatorComboBox1">
        <property name="editable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="currentText">
         <string/>

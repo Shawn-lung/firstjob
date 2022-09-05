@@ -54,6 +54,9 @@ class stockWindowUiController(MyWidget):
         
         self.prt.ui.confirmButton.clicked.connect(self.onConfirmButtonClicked)
 
+        self.prt.candleBars = []
+        self.prt.candelBarIndex = -1
+
         self.prt.timer = QTimer(self)
         self.prt.timer.timeout.connect(self.updateData)
 
@@ -69,7 +72,7 @@ class stockWindowUiController(MyWidget):
         self.prt.ui.resetButton.clicked.connect(self.updateData)
 
     def oneMinute(self):
-        self.prt.timer.start(10000)
+        self.prt.timer.start(60000)
 
     def onConfirmButtonClicked(self):
         if self.prt.ui.confirmButton.text() == "通知:開":
@@ -109,25 +112,62 @@ class stockWindowUiController(MyWidget):
         self.updateData()
 
     def updateData(self):
-        crawler = StockCrawler(self.stock_code)
-        crawler.setIntervalPeriod(interval=self.prt.ui.intervalComboBox.currentText(), period=self.prt.ui.periodComboBox.currentText())
 
+        self.crawlData()
         try :
-            self.prt.ui.privious_close_label.setText(str(crawler.stock_data['previous_close']))
-            self.prt.ui.open_label.setText(str(round(crawler.stock_data['today_open'][1], 2)))
+            self.prt.ui.privious_close_label.setText(str(self.prt.crawler.stock_data['previous_close']))
+            self.prt.ui.open_label.setText(str(round(self.prt.crawler.stock_data['today_open'][1], 2)))
         except TypeError:
             if self.firstFlag:
                 QMessageBox.warning(None, 'my messagebox', '無開盤價資料')
                 self.firstFlag = False
             self.prt.ui.open_label.setText("無資料")
+        self.prt.ui.limit_up_price_label.setText(str(self.prt.crawler.stock_data['limit_up_price']))
+        self.prt.ui.limit_down_price_label.setText(str(self.prt.crawler.stock_data['limit_down_price']))
+        self.prt.ui.close_label.setText(str(round(self.prt.crawler.stock_data['close'][-1])))
+        self.prt.ui.up_down_percentage_label.setStyleSheet("color:red" if self.prt.crawler.stock_data['percentage'] >= 0 else "color:green")
+        self.prt.ui.up_down_percentage_label.setText(f'{round(self.prt.crawler.stock_data["percentage"], 2)}%')
+        self.prt.ui.amplitude_label.setText(str(round(self.prt.crawler.stock_data['amplitude'], 2)))
             
-        self.prt.ui.limit_up_price_label.setText(str(crawler.stock_data['limit_up_price']))
-        self.prt.ui.limit_down_price_label.setText(str(crawler.stock_data['limit_down_price']))
-        self.prt.ui.close_label.setText(str(round(crawler.stock_data['close'][-1])))
-        self.prt.ui.up_down_percentage_label.setStyleSheet("color:red" if crawler.stock_data['percentage'] >= 0 else "color:green")
-        self.prt.ui.up_down_percentage_label.setText(f'{round(crawler.stock_data["percentage"], 2)}%')
-        self.prt.ui.amplitude_label.setText(str(round(crawler.stock_data['amplitude'], 2)))
-            
+        self.plotData()
+        self.oneMinute()
+
+        if self.button_switch_on:
+            self.lastmax = self.prt.crawler.lastmax_y
+            self.lastmin = self.prt.crawler.lastmin_y
+            self.button_switch_on = False
+        
+        if self.lastmax != self.prt.crawler.lastmax_x:
+            self.notifyFlag = True
+        
+        elif self.lastmin != self.prt.crawler.lastmin_x:
+            self.notifyFlag = True
+        
+        if self.prt.crawler.stock_data['close'][-1] >= self.prt.crawler.lastmax_y and self.notifyFlag == True:            
+            self.lastmax = self.prt.crawler.lastmax_x
+            self.lastmin = self.prt.crawler.lastmin_x
+            self.notifyFlag = False
+            self.notify()
+        
+        elif self.prt.crawler.stock_data['close'][-1] <= self.prt.crawler.lastmin_y and self.notifyFlag == True:            
+            self.lastmax = self.prt.crawler.lastmax_x
+            self.lastmin = self.prt.crawler.lastmin_x   
+            self.notify()
+            self.notifyFlag = False
+        
+    def crawlData(self):
+        self.prt.crawler  = StockCrawler(self.stock_code)
+        self.prt.crawler.setIntervalPeriod(interval=self.prt.ui.intervalComboBox.currentText(), period=self.prt.ui.periodComboBox.currentText())
+        self.prt.crawler.get_history_data(self.stock_code)
+        self.prt.candleBarIndex = -1
+        self.prt.candleBars = [self.prt.crawler.olddata.index[-1], self.prt.crawler.stock_data['open'][-1], self.prt.crawler.stock_data['high'][-1], self.prt.crawler.stock_data['low'][-1], self.prt.crawler.stock_data['close'][-1]]
+        self.prt.ui.tLabel.setText(str(self.prt.candleBars[0]))
+        self.prt.ui.oLabel.setText(str(round(self.prt.candleBars[1], 2)))
+        self.prt.ui.hLabel.setText(str(round(self.prt.candleBars[2], 2)))
+        self.prt.ui.lLabel.setText(str(round(self.prt.candleBars[3], 2)))
+        self.prt.ui.cLabel.setText(str(round(self.prt.candleBars[4], 2)))
+
+    def plotData(self):
         if self.mainCanvas:
             self.prt.ui.plotLayout.removeWidget(self.mainCanvas)
             self.prt.ui.plotLayout.removeWidget(self.mainToolbar)
@@ -144,18 +184,20 @@ class stockWindowUiController(MyWidget):
             wick="black")
         
         style = mpf.make_mpf_style(base_mpl_style="ggplot", marketcolors=mc)   
-        ap = [mpf.make_addplot(crawler.plus_or_minus('y'),type='line', width=0.7 )]
-        self.mainFigure, mainAxlst = mpf.plot(crawler.olddata, type="candle", style=style, volume = True, ylabel="price($)", returnfig=True, addplot=ap)
-        mainAxlst[0].set_title(crawler.stock_symbol)
+        ap = [mpf.make_addplot(self.prt.crawler.plus_or_minus('y'),type='line', width=0.7 )]
+        self.mainFigure, mainAxlst = mpf.plot(self.prt.crawler.olddata, type="candle", style=style, volume = True, ylabel="price($)", returnfig=True, addplot=ap)
+        mainAxlst[0].set_title(self.prt.crawler.stock_symbol)
         mainAxlst[0].grid(visible=True, which="both", axis="x", ms=1, markevery=1)  
-        mainAxlst[0].plot(crawler.lastmax_x, crawler.lastmax_y, 'ro' )
-        mainAxlst[0].plot(crawler.lastmin_x, crawler.lastmin_y, 'go' )
-        mainAxlst[0].plot(crawler.maxpoint_x, crawler.maxpoint_y, 'ro')
-        mainAxlst[0].plot(crawler.minpoint_x, crawler.minpoint_y, 'go')
-        mainAxlst[0].annotate(f"{round(crawler.lastmax_y, 2)}", xy = (crawler.lastmax_x, crawler.lastmax_y))
-        mainAxlst[0].annotate(f"{round(crawler.lastmin_y, 2)}", xy = (crawler.lastmin_x, crawler.lastmin_y),xytext=(crawler.lastmin_x, crawler.lastmin_y - 0.1*crawler.stock_data['amplitude']))
-        mainAxlst[0].annotate(f"{round(crawler.maxpoint_y, 2)}", xy = (crawler.maxpoint_x,crawler.maxpoint_y))
-        mainAxlst[0].annotate(f"{round(crawler.minpoint_y, 2)}", xy = (crawler.minpoint_x, crawler.minpoint_y), xytext=(crawler.minpoint_x, crawler.minpoint_y - 0.1*crawler.stock_data['amplitude']))
+        mainAxlst[0].plot(self.prt.crawler.lastmax_x, self.prt.crawler.lastmax_y, 'ro' )
+        mainAxlst[0].plot(self.prt.crawler.lastmin_x, self.prt.crawler.lastmin_y, 'go' )
+        mainAxlst[0].plot(self.prt.crawler.maxpoint_x, self.prt.crawler.maxpoint_y, 'ro')
+        mainAxlst[0].plot(self.prt.crawler.minpoint_x, self.prt.crawler.minpoint_y, 'go')
+        mainAxlst[0].annotate(f"{round(self.prt.crawler.lastmax_y, 2)}", xy = (self.prt.crawler.lastmax_x, self.prt.crawler.lastmax_y))
+        mainAxlst[0].annotate(f"{round(self.prt.crawler.lastmin_y, 2)}", xy = (self.prt.crawler.lastmin_x, self.prt.crawler.lastmin_y),xytext=(self.prt.crawler.lastmin_x, self.prt.crawler.lastmin_y - 0.1*self.prt.crawler.stock_data['amplitude']))
+        mainAxlst[0].annotate(f"{round(self.prt.crawler.lastmin_y, 2)}", xy = (self.prt.crawler.lastmin_x, self.prt.crawler.lastmin_y),xytext=(self.prt.crawler.lastmin_x, self.prt.crawler.lastmin_y - 0.1*self.prt.crawler.stock_data['amplitude']))
+        mainAxlst[0].annotate(f"{round(self.prt.crawler.maxpoint_y, 2)}", xy = (self.prt.crawler.maxpoint_x,self.prt.crawler.maxpoint_y))
+        mainAxlst[0].annotate(f"{round(self.prt.crawler.minpoint_y, 2)}", xy = (self.prt.crawler.minpoint_x, self.prt.crawler.minpoint_y), xytext=(self.prt.crawler.minpoint_x, self.prt.crawler.minpoint_y - 0.1*self.prt.crawler.stock_data['amplitude']))
+        
         self.mainCanvas = FigureCanvas(self.mainFigure)
         self.mainToolbar = NavigationToolbar(self.mainCanvas, self)
 
@@ -164,43 +206,7 @@ class stockWindowUiController(MyWidget):
         
         self.indicatorFigure.clear()
         self.subAx = self.indicatorFigure.add_subplot(111)
-        self.subAx.plot(crawler.ta_list(self.prt.ui.indicatorComboBox1.currentText()))
-        self.subAx.plot(crawler.ta_list(self.prt.ui.indicatorComboBox2.currentText()))
-        self.subAx.plot(crawler.ta_list(self.prt.ui.indicatorComboBox3.currentText()))
+        self.subAx.plot(self.prt.crawler.ta_list(self.prt.ui.indicatorComboBox1.currentText()))
+        self.subAx.plot(self.prt.crawler.ta_list(self.prt.ui.indicatorComboBox2.currentText()))
+        self.subAx.plot(self.prt.crawler.ta_list(self.prt.ui.indicatorComboBox3.currentText()))
         self.indicatorCanvas.draw()
-        self.oneMinute()
-
-        if self.button_switch_on:
-            self.lastmax = crawler.lastmax_y
-            self.lastmin = crawler.lastmin_y
-            self.button_switch_on = False
-        
-        if self.lastmax != crawler.lastmax_x:
-            self.notifyFlag = True
-        
-        elif self.lastmin != crawler.lastmin_x:
-            self.notifyFlag = True
-        
-        if crawler.stock_data['close'][-1] >= crawler.lastmax_y and self.notifyFlag == True:            
-            self.lastmax = crawler.lastmax_x
-            self.lastmin = crawler.lastmin_x
-            self.notifyFlag = False
-            self.notify()
-        
-        elif crawler.stock_data['close'][-1] <= crawler.lastmin_y and self.notifyFlag == True:            
-            self.lastmax = crawler.lastmax_x
-            self.lastmin = crawler.lastmin_x   
-            self.notify()
-            self.notifyFlag = False
-        
-    def crawlData(self):
-        self.prt.crawler  = StockCrawler(self.stock_code)
-        self.prt.crawler.setIntervalPeriod(interval=self.prt.crawler.ui.intervalComboBox.currentText(), period=self.prt.crawler.ui.periodComboBox().currenText())
-        self.prt.crawler.get_history_data(self.stock_code)
-        self.prt.candleBarIndex = -1
-        self.prt.candleBars = [self.prt.crawler.df.index[-1], self.prt.crawler.df['open'][-1], self.prt.crawler.df['high'][-1], self.prt.crawler.df['low'][-1], self.prt.crawler.df['close'][-1]]
-        self.prt.ui.tLabel.setText(str(self.prt.candleBars[0]))
-        self.prt.ui.oLabel.setText(str(self.prt.candleBars[1]))
-        self.prt.ui.hLabel.setText(str(self.prt.candleBars[2]))
-        self.prt.ui.lLabel.setText(str(self.prt.candleBars[3]))
-        self.prt.ui.cLabel.setText(str(self.prt.candleBars[4]))

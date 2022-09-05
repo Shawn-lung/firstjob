@@ -10,15 +10,28 @@ class MyWidget(QWidget):
             self.candleBarIndex -= 1
             try:
                 self.candleBars = [self.crawler.df.index[self.candleBarIndex], self.crawler.df['open'][self.candleBarIndex], self.crawler.df['high'][self.candleBarIndex], self.crawler.df['low'][self.candleBarIndex], self.crawler.df['close'][self.candleBarIndex]]
+            except AttributeError:
+                try:
+                    self.candleBars = [self.crawler.olddata.index[self.candleBarIndex], self.crawler.stock_data['open'][self.candleBarIndex], self.crawler.stock_data['high'][self.candleBarIndex], self.crawler.stock_data['low'][self.candleBarIndex],self.crawler.stock_data['close'][self.candleBarIndex]]
+                except IndexError:
+                    self.candleBarIndex += 1
+                    pass
             except IndexError:
                 self.candleBarIndex += 1
                 pass
             self.updateLabel()
         if a0.key() == Qt.Key.Key_Right.value:
             print("right pressed")
-            self.candleBarIndex += 1
+            if self.candleBarIndex != -1:
+                self.candleBarIndex += 1
             try:
                 self.candleBars = [self.crawler.df.index[self.candleBarIndex], self.crawler.df['open'][self.candleBarIndex], self.crawler.df['high'][self.candleBarIndex], self.crawler.df['low'][self.candleBarIndex], self.crawler.df['close'][self.candleBarIndex]]
+            except AttributeError:
+                try:
+                    self.candleBars = [self.crawler.olddata.index[self.candleBarIndex], self.crawler.stock_data['open'][self.candleBarIndex], self.crawler.stock_data['high'][self.candleBarIndex], self.crawler.stock_data['low'][self.candleBarIndex],self.crawler.stock_data['close'][self.candleBarIndex]]
+                except IndexError:
+                    self.candleBarIndex -= 1
+                    pass
             except IndexError:
                 self.candleBarIndex -= 1
                 pass
@@ -37,7 +50,7 @@ class MyWidget(QWidget):
 
     def updateLabel(self):
         self.ui.tLabel.setText(str(self.candleBars[0]))
-        self.ui.oLabel.setText(str(self.candleBars[1]))
-        self.ui.hLabel.setText(str(self.candleBars[2]))
-        self.ui.lLabel.setText(str(self.candleBars[3]))
-        self.ui.cLabel.setText(str(self.candleBars[4]))
+        self.ui.oLabel.setText(str(round(self.candleBars[1], 2)))
+        self.ui.hLabel.setText(str(round(self.candleBars[2], 2)))
+        self.ui.lLabel.setText(str(round(self.candleBars[3], 2)))
+        self.ui.cLabel.setText(str(round(self.candleBars[4], 2)))
