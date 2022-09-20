@@ -52,7 +52,7 @@ class futuresWindowUiController(MyWidget):
         self.prt.ui.confirmButton.clicked.connect(self.onConfirmButtonClicked)
 
         self.prt.candleBars = []
-        self.prt.candleBarsIndex = -1
+        self.prt.candleBarIndex = -1
 
         self.notify_timer = QTimer(self)
         self.notify_timer.timeout.connect(self.notify)

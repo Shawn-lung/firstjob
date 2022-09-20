@@ -316,27 +316,27 @@
      <item>
       <widget class="QComboBox" name="intervalComboBox">
        <property name="editable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="currentText">
-        <string>1m</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QComboBox" name="periodComboBox">
        <property name="editable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="currentText">
-        <string>1h</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QComboBox" name="indicatorComboBox1">
        <property name="editable">
-        <bool>true</bool>
+        <bool>false</bool>
        </property>
        <property name="currentText">
         <string/>
@@ -376,7 +376,82 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="plotLayout"/>
+    <layout class="QVBoxLayout" name="plotLayout">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>時間</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="tLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>開</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="oLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>高</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="hLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>低</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>收</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="cLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
