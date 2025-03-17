@@ -140,11 +140,12 @@ class StockCrawler():
             return(i-1)
             
     def getStocks():
-        r = requests.get("https://quality.data.gov.tw/dq_download_json.php?nid=11549&md5_url=bb878d47ffbe7b83bfc1b41d0b24946e")
+        #r = requests.get("https://quality.data.gov.tw/dq_download_json.php?nid=11549&md5_url=bb878d47ffbe7b83bfc1b41d0b24946e")
+        r = requests.get("https://quality.data.gov.tw/dq_download_json.php?nid=18419&md5_url=04541d53fd5cbeb2803e0fe4becc4b97")
         json = r.json()
         id_lst = []
         for dict in json:
-            id_lst.append(f"{dict['證券代號']}: {dict['證券名稱']}")
+            id_lst.append(f"{dict['公司代號']}: {dict['公司簡稱']}")
         return id_lst
 
     def setIntervalPeriod(self, interval="1m", period="1d"):

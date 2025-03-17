@@ -27,7 +27,15 @@ The main objective of this tool is to provide users with an easy-to-use interfac
   Refresh buttons located at both the top and bottom of the interface allow users to update the displayed information and charts.
 
 ---
+## Example Screenshot
 
+Below is a sample screenshot of the interface:
+
+![Stock Analysis Tool Screenshot](./image/screenshot.png)
+
+*Description: The upper chart shows candlesticks and volume, and the lower chart shows a technical indicator.*
+
+---
 ## Features
 
 - **Configurable Stock List:**  
@@ -57,7 +65,6 @@ The repository is organized as follows:
     firstjob/
     ├── .qt_for_python/                  # Auto-generated PyQt files
     ├── .vscode/                         # VS Code configuration files
-    ├── build/                           # Build output (e.g., executable)
     ├── __pycache__/                     # Cached Python bytecode
     ├── CrawlerClass.py                  # Web crawling logic to fetch stock data
     ├── MainUi.py                        # Main user interface layout module
@@ -68,7 +75,6 @@ The repository is organized as follows:
     ├── futuresWindowUi_controller.py    # Controller for futures window events
     ├── mainUI.ui                        # Qt Designer file for the main UI layout
     ├── start.py                         # Entry point to launch the application
-    ├── start.spec                       # PyInstaller spec file for creating an executable
     ├── stockWindowUi.py                 # Module for stock window functionality
     ├── stockWindowUi.ui                 # Qt Designer file for stock window UI
     ├── stockWindowUi_controller.py      # Controller for stock window events
@@ -82,48 +88,6 @@ The repository is organized as follows:
 
 ---
 
-## Installation & Setup
-
-1. **Clone the Repository:**
-
-       git clone https://github.com/Shawn-lung/firstjob.git
-       cd firstjob
-
-2. **Set Up a Virtual Environment (Optional but Recommended):**
-
-       python -m venv env
-       source env/bin/activate   # On Windows: env\Scripts\activate
-
-3. **Install Dependencies:**
-
-   The application primarily relies on PyQt (PyQt5 or PySide2) and other standard Python libraries. Install dependencies via:
-
-       pip install -r requirements.txt
-
-   Note: If a `requirements.txt` file is not provided, you may need to install PyQt manually:
-
-       pip install PyQt5
-
-4. **Run the Application:**
-
-       python start.py
-
-   Alternatively, run the provided executable (`start.exe`) if available.
-
----
-
-## Usage Instructions
-
-- **Configuring Stocks:**  
-  Update the stock symbol list (or the corresponding configuration file) as needed.
-
-- **Selecting Time Intervals & Indicators:**  
-  Use the GUI controls to choose your preferred time interval (e.g., 1m, 5m, 15m, etc.) and select which technical indicators to display.
-
-- **Refreshing Data:**  
-  Click the refresh buttons (located at both the top and bottom of the interface) to fetch the latest stock information and update the charts.
-
----
 
 ## Future Improvements
 
@@ -144,3 +108,7 @@ For any questions, feedback, or further information, please contact:
 - **Hsiang-I, Lung and Vincent, Tsai**  
 - **Email:** lunghsiangi@gmail.com  
 
+---
+
+## Final Note
+This repository does not include the compiled .exe to prevent unauthorized usage. The final product was privately delivered to the client. All code here is provided strictly as a demonstration of technical and analytical capabilities.
