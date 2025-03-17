@@ -98,15 +98,6 @@ The repository is organized as follows:
 - **Error Handling & Logging:**  
   Improve robustness with better error handling and logging features.
 
----
-
-
-## Contact
-
-For any questions, feedback, or further information, please contact:
-
-- **Hsiang-I, Lung and Vincent, Tsai**  
-- **Email:** lunghsiangi@gmail.com  
 
 ---
 
