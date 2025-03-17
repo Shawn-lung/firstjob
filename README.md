@@ -82,48 +82,6 @@ The repository is organized as follows:
 
 ---
 
-## Installation & Setup
-
-1. **Clone the Repository:**
-
-       git clone https://github.com/Shawn-lung/firstjob.git
-       cd firstjob
-
-2. **Set Up a Virtual Environment (Optional but Recommended):**
-
-       python -m venv env
-       source env/bin/activate   # On Windows: env\Scripts\activate
-
-3. **Install Dependencies:**
-
-   The application primarily relies on PyQt (PyQt5 or PySide2) and other standard Python libraries. Install dependencies via:
-
-       pip install -r requirements.txt
-
-   Note: If a `requirements.txt` file is not provided, you may need to install PyQt manually:
-
-       pip install PyQt5
-
-4. **Run the Application:**
-
-       python start.py
-
-   Alternatively, run the provided executable (`start.exe`) if available.
-
----
-
-## Usage Instructions
-
-- **Configuring Stocks:**  
-  Update the stock symbol list (or the corresponding configuration file) as needed.
-
-- **Selecting Time Intervals & Indicators:**  
-  Use the GUI controls to choose your preferred time interval (e.g., 1m, 5m, 15m, etc.) and select which technical indicators to display.
-
-- **Refreshing Data:**  
-  Click the refresh buttons (located at both the top and bottom of the interface) to fetch the latest stock information and update the charts.
-
----
 
 ## Future Improvements
 
@@ -135,12 +93,4 @@ The repository is organized as follows:
   Improve robustness with better error handling and logging features.
 
 ---
-
-
-## Contact
-
-For any questions, feedback, or further information, please contact:
-
-- **Hsiang-I, Lung and Vincent, Tsai**  
-- **Email:** lunghsiangi@gmail.com  
 
