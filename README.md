@@ -1,6 +1,6 @@
 # 轉折點看盤工具 (Turning Point Stock Chart Tool)
 
-轉折點看盤工具 is a Python-based stock analysis application with a graphical interface built using PyQt. Developed as a freelance project (contracted for NT$2,500) and collaboratively implemented by **Hsiang-I, Lung** and **Vincent, Tsai**, this tool is designed to fetch and display real-time stock information along with technical indicators. It showcases skills in Python programming, GUI development, web crawling, and data visualization—capabilities highly relevant for advanced business analytics.
+轉折點看盤工具 is a Python-based stock analysis application with a graphical interface built using PyQt. Developed as a freelance project (contracted for NT$5,000) and collaboratively implemented by **Hsiang-I, Lung** and **Vincent, Tsai**, this tool is designed to fetch and display real-time stock information along with technical indicators. It showcases skills in Python programming, GUI development, web crawling, and data visualization—capabilities highly relevant for advanced business analytics.
 
 ---
 
